@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FS開示管理 GM</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-mode="gm">
+<main class="app">
+  <header class="topbar">
+    <div class="title">
+      <h1>FS開示管理 GM</h1>
+      <p>進行値にチェックを入れると、PL画面にだけその項目が表示されます。</p>
+    </div>
+    <div class="status">
+      <span class="pill" id="room-pill">room: -</span>
+      <span class="pill warn" id="sync-status">Firebase未接続</span>
+    </div>
+  </header>
+
+  <div class="controls">
+    <label>FS <select id="fs-select"></select></label>
+    <input class="urlbox" id="player-url" type="text" readonly>
+    <button type="button" id="copy-player-url">PL用URLをコピー</button>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <h2>FS一覧</h2>
+      <div class="scroll">
+        <div class="fs-nav" id="fs-nav"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>GM操作</h2>
+      <div class="scroll">
+        <div id="setup-warning"></div>
+        <div id="fs-detail"></div>
+      </div>
+    </section>
+  </div>
+</main>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
