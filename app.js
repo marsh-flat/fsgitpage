@@ -148,6 +148,10 @@ function renderDetail() {
   const fs = fsData.find(item => item.id === selectedFsId) || fsData[0];
   if (!fs) return;
   const current = fsState(fs.id);
+  const requirement = fs.requirement || requirementFor(fs);
+  const baseCheck = fs.check || "1ラウンドに1回、行動内容に合う技能で判定する。判定成功で進行値+1、達成値18以上で+2、25以上で+3。";
+  const progress = Number(current.progress || 0);
+  const progressPercent = Math.min(100, Math.max(0, (progress / 12) * 100));
 
   if (mode === "player" && !current.visible) {
     elements.detail.innerHTML = `<p class="hidden-note">このFSはまだGMから開示されていません。</p>`;
@@ -158,6 +162,8 @@ function renderDetail() {
     const key = String(milestone.value);
     const visible = Boolean(current.milestones?.[key]);
     if (mode === "player" && !visible) return "";
+    const check = milestone.check || `累積進行値が${milestone.value}以上になると開示。判定成功で+1、達成値18以上で+2、25以上で+3。`;
+    const requirement = milestone.requirement || fs.requirement || requirementFor(fs);
     return `
       <div class="milestone ${visible ? "visible" : ""}">
         <div class="milestone-head">
@@ -165,6 +171,16 @@ function renderDetail() {
           ${mode === "gm" ? checkboxHtml(`milestone-${key}`, visible, `data-action="milestone" data-value="${key}"`) : ""}
         </div>
         <p>${escapeHtml(milestone.text)}</p>
+        <dl class="milestone-rule">
+          <div>
+            <dt>判定条件</dt>
+            <dd>${escapeHtml(check)}</dd>
+          </div>
+          <div>
+            <dt>要求</dt>
+            <dd>${escapeHtml(requirement)}</dd>
+          </div>
+        </dl>
       </div>
     `;
   }).join("");
@@ -202,11 +218,40 @@ function renderDetail() {
               <input type="checkbox" data-action="visible" ${current.visible ? "checked" : ""}>
               <span>このFSをPLへ開示する</span>
             </label>
+            <label class="field-row">
+              <span>現在の達成値</span>
+              <input type="number" min="0" max="12" step="1" value="${progress}" data-action="progress">
+            </label>
             <button type="button" data-action="open-all">進行値をすべて開示</button>
             <button type="button" data-action="close-all">進行値をすべて非開示</button>
           </div>
         ` : ""}
       </div>
+
+      <section class="basic-info">
+        <h3>基本情報</h3>
+        <div class="basic-grid">
+          <div>
+            <span class="basic-label">終了条件</span>
+            <span>${escapeHtml(fs.end)}</span>
+          </div>
+          <div>
+            <span class="basic-label">判定条件</span>
+            <span>${escapeHtml(baseCheck)}</span>
+          </div>
+          <div>
+            <span class="basic-label">要求</span>
+            <span>${escapeHtml(requirement)}</span>
+          </div>
+          <div>
+            <span class="basic-label">現在の達成状況</span>
+            <span>${progress} / 12</span>
+          </div>
+        </div>
+        <div class="progress-track" aria-label="現在の達成状況">
+          <span style="width: ${progressPercent}%"></span>
+        </div>
+      </section>
 
       <p class="summary">${escapeHtml(fs.summary)}</p>
 
@@ -248,6 +293,8 @@ async function handleGmChange(fsId, event) {
     next.fs[fsId].milestones[target.dataset.value] = target.checked;
   } else if (action === "successVisible" || action === "failureVisible") {
     next.fs[fsId][action] = target.checked;
+  } else if (action === "progress") {
+    next.fs[fsId].progress = clampProgress(target.value);
   }
 
   await saveState(next);
@@ -298,6 +345,7 @@ function mergeState(raw) {
 function mergeFsState(value) {
   return {
     visible: Boolean(value?.visible),
+    progress: clampProgress(value?.progress),
     successVisible: Boolean(value?.successVisible),
     failureVisible: Boolean(value?.failureVisible),
     milestones: {
@@ -307,6 +355,12 @@ function mergeFsState(value) {
       "12": Boolean(value?.milestones?.["12"])
     }
   };
+}
+
+function clampProgress(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return 0;
+  return Math.max(0, Math.min(12, Math.round(number)));
 }
 
 function fsState(id) {
@@ -343,6 +397,36 @@ function groupByScene(items) {
     acc[fs.sceneName].push(fs);
     return acc;
   }, {});
+}
+
+function requirementFor(fs) {
+  const requirements = {
+    A1: "〈情報：裏社会〉〈知覚〉〈調達〉。目安難易度9。",
+    A2: "〈交渉〉〈情報：GPO〉【社会】。目安難易度9。",
+    A3: "〈情報：ストレンジャーズ〉〈知識：レネゲイド〉〈交渉〉。目安難易度9。",
+    A4: "〈交渉〉〈情報：裏社会〉【社会】。目安難易度9。",
+    A5: "〈交渉〉〈情報：GPO〉〈調達〉。目安難易度9。",
+    B1: "〈知覚〉〈情報：裏社会〉〈隠密〉。目安難易度9。",
+    B2: "〈情報：UGN〉〈医学〉〈知覚〉。目安難易度9。",
+    B3: "〈RC〉〈知識：レネゲイド〉〈意志〉。目安難易度9。",
+    C11: "〈白兵〉〈射撃〉〈回避〉〈運転〉。目安難易度10。",
+    C12: "〈白兵〉〈射撃〉〈RC〉〈回避〉。目安難易度10。",
+    C13: "〈医学〉〈交渉〉〈意志〉〈知覚〉。目安難易度10。",
+    C14: "〈交渉〉〈情報：裏社会〉〈運転〉。目安難易度10。",
+    C15: "〈交渉〉〈情報：GPO〉〈調達〉。目安難易度10。",
+    C21: "〈RC〉〈知識：レネゲイド〉〈意志〉。目安難易度11。",
+    C22: "〈RC〉〈知識：レネゲイド〉〈意志〉。目安難易度11。",
+    C23: "〈情報：ストレンジャーズ〉〈交渉〉〈知識：レネゲイド〉。目安難易度10。",
+    C24: "〈交渉〉〈情報：裏社会〉〈運転〉。目安難易度10。",
+    C25: "〈交渉〉〈情報：GPO〉〈調達〉。目安難易度10。",
+    D1A: "〈知覚〉〈運転〉〈情報：裏社会〉〈交渉〉。目安難易度11。",
+    D1B: "〈白兵〉〈射撃〉〈運転〉〈交渉〉。目安難易度11。",
+    D2: "〈医学〉〈意志〉〈知覚〉〈交渉〉。目安難易度11。",
+    D3: "〈白兵〉〈射撃〉〈RC〉〈運転〉。目安難易度11。",
+    D4: "〈交渉〉〈情報：ストレンジャーズ〉〈医学〉。目安難易度11。"
+  };
+
+  return requirements[fs.id] || "行動内容に合う技能。目安難易度9。";
 }
 
 function escapeHtml(value) {

@@ -273,8 +273,68 @@ button:hover {
   accent-color: var(--accent);
 }
 
+.field-row {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.field-row input[type="number"] {
+  width: 100%;
+  min-height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 4px 8px;
+  background: #fff;
+}
+
 .summary {
   color: var(--muted);
+}
+
+.basic-info {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.basic-info h3 {
+  margin: 0;
+}
+
+.basic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 12px;
+  font-size: 13px;
+}
+
+.basic-grid div {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 6px;
+}
+
+.basic-label {
+  color: #334155;
+  font-weight: 800;
+}
+
+.progress-track {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dbe3ee;
+}
+
+.progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
 }
 
 .milestones {
@@ -307,6 +367,31 @@ button:hover {
   margin: 5px 0 0;
   color: var(--muted);
   font-size: 13px;
+}
+
+.milestone-rule {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(101, 117, 139, 0.22);
+  font-size: 12px;
+}
+
+.milestone-rule div {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 6px;
+}
+
+.milestone-rule dt {
+  color: #334155;
+  font-weight: 800;
+}
+
+.milestone-rule dd {
+  margin: 0;
+  color: var(--muted);
 }
 
 .result-grid {
@@ -355,6 +440,7 @@ button:hover {
   }
 
   .milestones,
+  .basic-grid,
   .result-grid {
     grid-template-columns: 1fr;
   }
