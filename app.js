@@ -2,13 +2,13 @@ import { firebaseConfig } from "./firebase-config.js";
 import { fsData } from "./fs-data.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  onSnapshot,
-  setDoc,
+  getDatabase,
+  get,
+  onValue,
+  ref,
+  set,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
 
 const mode = document.body.dataset.mode;
 const params = new URLSearchParams(location.search);
@@ -18,6 +18,7 @@ let db = null;
 let roomRef = null;
 let unsubscribe = null;
 let state = defaultState();
+const roomPath = room.replace(/[.#$[\]/]/g, "_");
 
 const elements = {
   roomPill: document.getElementById("room-pill"),
@@ -52,27 +53,27 @@ function isFirebaseConfigured() {
 async function connectFirebase() {
   try {
     const app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    roomRef = doc(db, "fsRooms", room);
-    const snap = await getDoc(roomRef);
+    db = getDatabase(app);
+    roomRef = ref(db, `fsRooms/${roomPath}`);
+    const snap = await get(roomRef);
     if (!snap.exists() && mode === "gm") {
-      await setDoc(roomRef, {
+      await set(roomRef, {
         ...defaultState(),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
     }
 
-    unsubscribe = onSnapshot(roomRef, snapshot => {
+    unsubscribe = onValue(roomRef, snapshot => {
       if (snapshot.exists()) {
-        state = mergeState(snapshot.data());
+        state = mergeState(snapshot.val());
       }
       setSyncStatus("Firebase接続中", true);
       render();
     }, error => {
       console.error(error);
       setSyncStatus("同期エラー", false);
-      showWarning(`Firestoreの読み書きに失敗しました: ${error.message}`);
+      showWarning(`Realtime Databaseの読み書きに失敗しました: ${error.message}`);
     });
   } catch (error) {
     console.error(error);
@@ -270,10 +271,10 @@ async function saveState(next) {
   render();
   if (!roomRef) return;
   try {
-    await setDoc(roomRef, {
+    await set(roomRef, {
       ...state,
       updatedAt: serverTimestamp()
-    }, { merge: true });
+    });
   } catch (error) {
     console.error(error);
     showWarning(`保存に失敗しました: ${error.message}`);

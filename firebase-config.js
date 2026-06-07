@@ -1,10 +1,12 @@
 // Firebase Console で Web アプリを追加して表示される設定に差し替えてください。
-// この値自体は「秘密鍵」ではありませんが、Firestore Rules は必ず用途に合わせて設定してください。
+// この値自体は「秘密鍵」ではありませんが、Database Rules は必ず用途に合わせて設定してください。
 export const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "AIzaSyAZIEEKOg1Oi-WYaNuP-0Db6jhtde1IPiI",
+  authDomain: "dm-fsgitpage.firebaseapp.com",
+  databaseURL: "https://dm-fsgitpage-default-rtdb.firebaseio.com",
+  projectId: "dm-fsgitpage",
+  storageBucket: "dm-fsgitpage.firebasestorage.app",
+  messagingSenderId: "491301058733",
+  appId: "1:491301058733:web:acb13674f8200e868f2e24",
+  measurementId: "G-GN1RSK31T6"
 };
