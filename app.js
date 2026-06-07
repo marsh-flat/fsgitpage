@@ -83,21 +83,23 @@ async function connectFirebase() {
 }
 
 function renderStaticControls() {
-  elements.fsSelect.innerHTML = "";
-  fsData.forEach(fs => {
-    const option = document.createElement("option");
-    option.value = fs.id;
-    option.textContent = `${fs.code} ${fs.title}`;
-    elements.fsSelect.appendChild(option);
-  });
+  if (elements.fsSelect) {
+    elements.fsSelect.innerHTML = "";
+    fsData.forEach(fs => {
+      const option = document.createElement("option");
+      option.value = fs.id;
+      option.textContent = `${fs.code} ${fs.title}`;
+      elements.fsSelect.appendChild(option);
+    });
 
-  elements.fsSelect.value = selectedFsId;
-  elements.fsSelect.addEventListener("change", () => {
-    selectedFsId = elements.fsSelect.value;
-    updateUrlParam("fs", selectedFsId);
-    updatePlayerUrl();
-    render();
-  });
+    elements.fsSelect.value = selectedFsId;
+    elements.fsSelect.addEventListener("change", () => {
+      selectedFsId = elements.fsSelect.value;
+      updateUrlParam("fs", selectedFsId);
+      updatePlayerUrl();
+      render();
+    });
+  }
 
   if (elements.copyPlayerUrl) {
     elements.copyPlayerUrl.addEventListener("click", async () => {
@@ -108,14 +110,21 @@ function renderStaticControls() {
 }
 
 function render() {
-  elements.fsSelect.value = selectedFsId;
+  if (mode === "player") {
+    selectedFsId = activeFsId();
+  }
+  if (elements.fsSelect) {
+    elements.fsSelect.value = selectedFsId;
+  }
   renderNav();
   renderDetail();
 }
 
 function renderNav() {
+  if (!elements.nav) return;
   const grouped = groupByScene(fsData);
   elements.nav.innerHTML = "";
+  const activeId = activeFsId();
 
   Object.entries(grouped).forEach(([sceneName, items]) => {
     const block = document.createElement("div");
@@ -126,18 +135,22 @@ function renderNav() {
     block.appendChild(title);
 
     items.forEach(fs => {
-      if (mode === "player" && !fsState(fs.id).visible) return;
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = `nav-item ${fs.id === selectedFsId ? "active" : ""}`;
-      button.innerHTML = `<span class="nav-code">${fs.code}</span><span class="nav-title">${escapeHtml(fs.title)}</span>`;
-      button.addEventListener("click", () => {
+      const item = document.createElement("label");
+      item.className = `nav-item ${fs.id === selectedFsId ? "active" : ""} ${fs.id === activeId ? "broadcast" : ""}`;
+      item.innerHTML = `
+        <input type="radio" name="active-fs" value="${fs.id}" ${fs.id === activeId ? "checked" : ""}>
+        <span class="nav-code">${fs.code}</span>
+        <span class="nav-title">${escapeHtml(fs.title)}</span>
+      `;
+      item.querySelector("input").addEventListener("change", async () => {
         selectedFsId = fs.id;
         updateUrlParam("fs", selectedFsId);
         updatePlayerUrl();
-        render();
+        const next = structuredClone(state);
+        next.activeFsId = fs.id;
+        await saveState(next);
       });
-      block.appendChild(button);
+      block.appendChild(item);
     });
 
     elements.nav.appendChild(block);
@@ -330,12 +343,16 @@ async function saveState(next) {
 
 function defaultState() {
   return {
+    activeFsId: fsData[0]?.id || "",
     fs: Object.fromEntries(fsData.map(fs => [fs.id, mergeFsState({})]))
   };
 }
 
 function mergeState(raw) {
   const next = defaultState();
+  if (fsData.some(fs => fs.id === raw?.activeFsId)) {
+    next.activeFsId = raw.activeFsId;
+  }
   Object.entries(raw?.fs || {}).forEach(([id, value]) => {
     next.fs[id] = mergeFsState(value);
   });
@@ -367,11 +384,15 @@ function fsState(id) {
   return mergeFsState(state.fs?.[id]);
 }
 
+function activeFsId() {
+  return fsData.some(fs => fs.id === state.activeFsId) ? state.activeFsId : fsData[0]?.id;
+}
+
 function updatePlayerUrl() {
   if (!elements.playerUrl) return;
   const url = new URL("player.html", location.href);
   url.searchParams.set("room", room);
-  url.searchParams.set("fs", selectedFsId);
+  url.searchParams.delete("fs");
   elements.playerUrl.value = url.href;
 }
 

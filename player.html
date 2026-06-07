@@ -11,7 +11,7 @@
   <header class="topbar">
     <div class="title">
       <h1>FS表示</h1>
-      <p>GMが開示した進行値だけが表示されます。</p>
+      <p>GMが指定したFSだけが表示されます。</p>
     </div>
     <div class="status">
       <span class="pill" id="room-pill">room: -</span>
@@ -19,18 +19,7 @@
     </div>
   </header>
 
-  <div class="controls">
-    <label>FS <select id="fs-select"></select></label>
-  </div>
-
-  <div class="layout">
-    <section class="panel">
-      <h2>開示済みFS</h2>
-      <div class="scroll">
-        <div class="fs-nav" id="fs-nav"></div>
-      </div>
-    </section>
-
+  <div class="layout player-layout">
     <section class="panel">
       <h2>FS内容</h2>
       <div class="scroll">
