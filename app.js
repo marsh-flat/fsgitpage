@@ -359,8 +359,9 @@ async function handleGmChange(fsId, event) {
   if (target.tagName !== "INPUT") return;
   const action = target.dataset.action;
   const next = structuredClone(state);
+  const fs = fsData.find(item => item.id === fsId);
   next.fs ??= {};
-  next.fs[fsId] = mergeFsState(next.fs[fsId]);
+  next.fs[fsId] = mergeFsState(next.fs[fsId], fs);
 
   if (action === "visible") {
     next.fs[fsId].visible = target.checked;
@@ -372,7 +373,6 @@ async function handleGmChange(fsId, event) {
   } else if (action === "successVisible" || action === "failureVisible") {
     next.fs[fsId][action] = target.checked;
   } else if (action === "progress") {
-    const fs = fsData.find(item => item.id === fsId);
     next.fs[fsId].progress = clampProgress(target.value, fs?.targetProgress || fs?.maxProgress || 30);
   }
 
