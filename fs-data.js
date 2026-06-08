@@ -15,7 +15,7 @@ export const fsData = [
       "required": [],
       "recommended": [
         "PC1",
-        "PC4"
+        "PC4は事前調査資料あり。達成値+2"
       ]
     },
     "requiresSuccess": [],
@@ -70,7 +70,7 @@ export const fsData = [
     "title": "孤児院のGPOを退却させる",
     "end": "4R経過",
     "check": "〈交渉〉",
-    "difficulty": 9,
+    "difficulty": 8,
     "maxProgress": 30,
     "targetProgress": 12,
     "exp": 4,
@@ -81,7 +81,7 @@ export const fsData = [
       "recommended": []
     },
     "requiresSuccess": [],
-    "summary": "孤児院周辺に展開するGPO過激派を、手続き、保護記録、通信照会、現場判断の遅延によって遠ざける。\nPC3(GPO)はGPO職員として相性がよい。\nただし、過激派と直接衝突するとPC3への疑念が強まる。",
+    "summary": "孤児院周辺に展開するGPO過激派を、手続き、保護記録、通信照会、現場判断の遅延によって遠ざける。 PC3(GPO)はGPO職員として相性がよい。 ただし、過激派と直接衝突するとPC3への疑念が強まる。",
     "milestones": [
       {
         "value": 3,

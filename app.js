@@ -667,12 +667,22 @@ function formatCheck(check, difficulty) {
 }
 
 function formatPcParticipation(participation = {}) {
-  const required = participation.required || [];
-  const recommended = participation.recommended || [];
+  const required = normalizeTextList(participation.required);
+  const recommended = normalizeTextList(participation.recommended);
   const parts = [];
-  if (required.length) parts.push(`${required.join("・")}参加必須`);
-  if (recommended.length) parts.push(recommended.join("・"));
+  if (required.length) parts.push(limitConditionText(`${required.join("・")}参加必須`));
+  if (recommended.length) parts.push(limitConditionText(recommended.join("・")));
   return parts.join(" / ") || "指定なし";
+}
+
+function normalizeTextList(value) {
+  if (!value) return [];
+  const items = Array.isArray(value) ? value : [value];
+  return items.map(item => String(item).trim()).filter(Boolean);
+}
+
+function limitConditionText(text) {
+  return String(text).slice(0, 25);
 }
 
 function renderProgressCounter(progress, targetProgress) {
