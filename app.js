@@ -18,6 +18,7 @@ let db = null;
 let roomRef = null;
 let unsubscribe = null;
 let state = defaultState();
+let activeInfoText = "";
 const roomPath = room.replace(/[.#$[\]/]/g, "_");
 
 const elements = {
@@ -185,6 +186,7 @@ function renderDetail() {
     if (mode === "player" && !visible) return "";
     const check = formatCheck(milestone.check || fs.check, milestone.difficulty || fs.difficulty);
     const requirement = milestone.requirement || "指定なし";
+    const infoHtml = renderMilestoneInfos(fs.id, key, milestone, current);
     return `
       <div class="milestone ${visible ? "visible" : ""}">
         <div class="milestone-head">
@@ -203,6 +205,7 @@ function renderDetail() {
             <dd>${escapeHtml(requirement)}</dd>
           </div>
         </dl>
+        ${infoHtml}
       </div>
     `;
   }).join("");
@@ -296,14 +299,55 @@ function renderDetail() {
         </div>
       </div>
     </article>
+    <dialog class="info-dialog" id="info-dialog">
+      <div class="info-dialog-head">
+        <h3 id="info-dialog-title">情報</h3>
+        <button type="button" class="icon-button copy-button" data-info-copy aria-label="クリップボードにコピー">
+          <span aria-hidden="true"></span>
+        </button>
+        <button type="button" class="dialog-close" data-dialog-close aria-label="閉じる">×</button>
+      </div>
+      <div class="info-dialog-body" id="info-dialog-body"></div>
+    </dialog>
   `;
 
+  elements.detail.onclick = handleDetailClick;
   if (mode === "gm") {
     elements.detail.querySelectorAll("[data-action]").forEach(input => {
       input.addEventListener("change", event => handleGmChange(fs.id, event));
-      input.addEventListener("click", event => handleGmClick(fs.id, event));
     });
   }
+}
+
+function renderMilestoneInfos(fsId, milestoneKey, milestone, current) {
+  const infos = Array.isArray(milestone.infos) ? milestone.infos : [];
+  if (!infos.length) return "";
+  if (mode === "gm") {
+    const items = infos.map((info, index) => {
+      const key = String(index);
+      const visible = Boolean(current.infos?.[milestoneKey]?.[key]);
+      return `
+        <label class="info-control ${visible ? "visible" : ""}">
+          <input type="checkbox" data-action="info" data-value="${milestoneKey}" data-info-index="${key}" ${visible ? "checked" : ""}>
+          <span class="info-control-label">情報${index + 1}</span>
+          <strong>${escapeHtml(info.title || `情報${index + 1}`)}</strong>
+          <span>${escapeHtml(info.text)}</span>
+        </label>
+      `;
+    }).join("");
+    return `<div class="info-list">${items}</div>`;
+  }
+
+  const buttons = infos.map((info, index) => {
+    const key = String(index);
+    if (!current.infos?.[milestoneKey]?.[key]) return "";
+    return `
+      <button type="button" class="info-chip" data-info-open data-fs-id="${escapeHtml(fsId)}" data-value="${milestoneKey}" data-info-index="${key}">
+        情報${index + 1}
+      </button>
+    `;
+  }).join("");
+  return buttons ? `<div class="info-chips">${buttons}</div>` : "";
 }
 
 function checkboxHtml(id, checked, attrs) {
@@ -322,6 +366,9 @@ async function handleGmChange(fsId, event) {
     next.fs[fsId].visible = target.checked;
   } else if (action === "milestone") {
     next.fs[fsId].milestones[target.dataset.value] = target.checked;
+  } else if (action === "info") {
+    next.fs[fsId].infos[target.dataset.value] ??= {};
+    next.fs[fsId].infos[target.dataset.value][target.dataset.infoIndex] = target.checked;
   } else if (action === "successVisible" || action === "failureVisible") {
     next.fs[fsId][action] = target.checked;
   } else if (action === "progress") {
@@ -332,9 +379,31 @@ async function handleGmChange(fsId, event) {
   await saveState(next);
 }
 
-async function handleGmClick(fsId, event) {
+async function handleDetailClick(event) {
+  const closeButton = event.target.closest("[data-dialog-close]");
+  if (closeButton) {
+    elements.detail.querySelector("#info-dialog")?.close();
+    return;
+  }
+
+  const copyButton = event.target.closest("[data-info-copy]");
+  if (copyButton) {
+    await copyText(activeInfoText);
+    copyButton.classList.add("copied");
+    window.setTimeout(() => copyButton.classList.remove("copied"), 800);
+    return;
+  }
+
+  const infoButton = event.target.closest("[data-info-open]");
+  if (infoButton) {
+    openInfoDialog(infoButton.dataset);
+    return;
+  }
+
+  if (mode !== "gm") return;
   const action = event.target.dataset.action;
   if (action !== "open-all" && action !== "close-all") return;
+  const fsId = selectedFsId;
   const fs = fsData.find(item => item.id === fsId);
   const next = structuredClone(state);
   next.fs ??= {};
@@ -343,6 +412,33 @@ async function handleGmClick(fsId, event) {
     next.fs[fsId].milestones[String(milestone.value)] = action === "open-all";
   });
   await saveState(next);
+}
+
+function openInfoDialog(dataset) {
+  const fs = fsData.find(item => item.id === dataset.fsId);
+  const milestone = fs?.milestones?.find(item => String(item.value) === dataset.value);
+  const info = milestone?.infos?.[Number(dataset.infoIndex)];
+  if (!info) return;
+  const dialog = elements.detail.querySelector("#info-dialog");
+  const title = elements.detail.querySelector("#info-dialog-title");
+  const body = elements.detail.querySelector("#info-dialog-body");
+  activeInfoText = info.text || "";
+  title.textContent = info.title || `情報${Number(dataset.infoIndex) + 1}`;
+  body.textContent = activeInfoText;
+  dialog.showModal();
+}
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text).catch(() => {});
+    return;
+  }
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
 }
 
 async function saveState(next) {
@@ -363,7 +459,7 @@ async function saveState(next) {
 function defaultState() {
   return {
     activeFsId: fsData[0]?.id || "",
-    fs: Object.fromEntries(fsData.map(fs => [fs.id, mergeFsState({})]))
+    fs: Object.fromEntries(fsData.map(fs => [fs.id, mergeFsState({}, fs)]))
   };
 }
 
@@ -373,23 +469,32 @@ function mergeState(raw) {
     next.activeFsId = raw.activeFsId;
   }
   Object.entries(raw?.fs || {}).forEach(([id, value]) => {
-    next.fs[id] = mergeFsState(value);
+    const fs = fsData.find(item => item.id === id);
+    next.fs[id] = mergeFsState(value, fs);
   });
   return next;
 }
 
-function mergeFsState(value) {
+function mergeFsState(value, fs = null) {
+  const milestoneState = {};
+  const infoState = {};
+  const milestones = fs?.milestones?.length ? fs.milestones : [{ value: 3 }, { value: 6 }, { value: 9 }, { value: 12 }];
+  milestones.forEach(milestone => {
+    const milestoneKey = String(milestone.value);
+    milestoneState[milestoneKey] = Boolean(value?.milestones?.[milestoneKey]);
+    infoState[milestoneKey] = {};
+    (milestone.infos || []).forEach((_, index) => {
+      const infoKey = String(index);
+      infoState[milestoneKey][infoKey] = Boolean(value?.infos?.[milestoneKey]?.[infoKey]);
+    });
+  });
   return {
     visible: Boolean(value?.visible),
     progress: clampProgress(value?.progress, 99),
     successVisible: Boolean(value?.successVisible),
     failureVisible: Boolean(value?.failureVisible),
-    milestones: {
-      "3": Boolean(value?.milestones?.["3"]),
-      "6": Boolean(value?.milestones?.["6"]),
-      "9": Boolean(value?.milestones?.["9"]),
-      "12": Boolean(value?.milestones?.["12"])
-    }
+    milestones: milestoneState,
+    infos: infoState
   };
 }
 
@@ -400,7 +505,8 @@ function clampProgress(value, max) {
 }
 
 function fsState(id) {
-  return mergeFsState(state.fs?.[id]);
+  const fs = fsData.find(item => item.id === id);
+  return mergeFsState(state.fs?.[id], fs);
 }
 
 function activeFsId() {
