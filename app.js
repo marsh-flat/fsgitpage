@@ -162,7 +162,8 @@ function renderDetail() {
   if (!fs) return;
   const current = fsState(fs.id);
   const maxProgress = Number(fs.maxProgress || 30);
-  const progress = Math.min(maxProgress, Number(current.progress || 0));
+  const targetProgress = Number(fs.targetProgress || maxProgress);
+  const progress = Math.min(targetProgress, Number(current.progress || 0));
   const pcParticipation = formatPcParticipation(fs.pcParticipation);
 
   if (mode === "player" && !current.visible) {
@@ -233,7 +234,7 @@ function renderDetail() {
             </label>
             <label class="field-row">
               <span>現在の達成値</span>
-              <input type="number" min="0" max="${maxProgress}" step="1" value="${progress}" data-action="progress">
+              <input type="number" min="0" max="${targetProgress}" step="1" value="${progress}" data-action="progress">
             </label>
             <button type="button" data-action="open-all">進行値をすべて開示</button>
             <button type="button" data-action="close-all">進行値をすべて非開示</button>
@@ -261,12 +262,16 @@ function renderDetail() {
             <tr>
               <th>経験点</th>
               <td>${escapeHtml(fs.exp || 0)}点</td>
+              <th>目標進行値</th>
+              <td>${targetProgress}</td>
+            </tr>
+            <tr>
               <th>PC参加条件</th>
-              <td colspan="3">${escapeHtml(pcParticipation)}</td>
+              <td colspan="5">${escapeHtml(pcParticipation)}</td>
             </tr>
             <tr>
               <th>進行カウンター</th>
-              <td colspan="5">${renderProgressCounter(progress, maxProgress)}</td>
+              <td colspan="5">${renderProgressCounter(progress, targetProgress)}</td>
             </tr>
           </tbody>
         </table>
@@ -314,7 +319,7 @@ async function handleGmChange(fsId, event) {
     next.fs[fsId][action] = target.checked;
   } else if (action === "progress") {
     const fs = fsData.find(item => item.id === fsId);
-    next.fs[fsId].progress = clampProgress(target.value, fs?.maxProgress || 30);
+    next.fs[fsId].progress = clampProgress(target.value, fs?.targetProgress || fs?.maxProgress || 30);
   }
 
   await saveState(next);
@@ -442,10 +447,14 @@ function formatPcParticipation(participation = {}) {
   return parts.join(" / ") || "指定なし";
 }
 
-function renderProgressCounter(progress, maxProgress) {
+function renderProgressCounter(progress, targetProgress) {
   const cells = [];
-  for (let index = 1; index <= maxProgress; index += 1) {
-    cells.push(`<span class="${index === progress ? "current" : ""}">${index}</span>`);
+  for (let index = 1; index <= targetProgress; index += 1) {
+    const classes = [
+      index === progress ? "current" : "",
+      index === targetProgress ? "target" : ""
+    ].filter(Boolean).join(" ");
+    cells.push(`<span class="${classes}">${index}</span>`);
   }
   return `<div class="progress-counter">${cells.join("")}</div>`;
 }

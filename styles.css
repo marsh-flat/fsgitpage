@@ -403,6 +403,16 @@ body[data-mode="player"] .status {
   font-weight: 900;
 }
 
+.progress-counter span.target {
+  color: #047857;
+  font-weight: 900;
+}
+
+.progress-counter span.current.target {
+  border-color: #047857;
+  background: #ecfdf5;
+}
+
 .milestone-rule {
   display: grid;
   gap: 4px;

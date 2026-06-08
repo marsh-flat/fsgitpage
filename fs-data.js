@@ -9,6 +9,7 @@ export const fsData = [
     "check": "〈知覚〉",
     "difficulty": 8,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -66,6 +67,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -122,6 +124,7 @@ export const fsData = [
     "check": "〈情報：軍事〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -178,6 +181,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -232,6 +236,7 @@ export const fsData = [
     "check": "〈情報：GPO〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -288,6 +293,7 @@ export const fsData = [
     "check": "〈知覚〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -344,6 +350,7 @@ export const fsData = [
     "check": "〈情報：噂話〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -401,6 +408,7 @@ export const fsData = [
     "check": "〈知識：レネゲイド〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -457,6 +465,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 10,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -514,6 +523,7 @@ export const fsData = [
     "check": "〈知覚〉",
     "difficulty": 10,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -568,6 +578,7 @@ export const fsData = [
     "check": "〈知識：医療〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -625,6 +636,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -679,6 +691,7 @@ export const fsData = [
     "check": "〈情報：GPO〉",
     "difficulty": 9,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -735,6 +748,7 @@ export const fsData = [
     "check": "【精神】または〈RC〉",
     "difficulty": 11,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -791,6 +805,7 @@ export const fsData = [
     "check": "【精神】または〈RC〉",
     "difficulty": 11,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -847,6 +862,7 @@ export const fsData = [
     "check": "〈情報：軍事〉",
     "difficulty": 10,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -903,6 +919,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 10,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -957,6 +974,7 @@ export const fsData = [
     "check": "〈情報：GPO〉",
     "difficulty": 10,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -1013,6 +1031,7 @@ export const fsData = [
     "check": "〈知覚〉",
     "difficulty": 12,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -1067,6 +1086,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 12,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -1123,6 +1143,7 @@ export const fsData = [
     "check": "【精神】",
     "difficulty": 12,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -1180,6 +1201,7 @@ export const fsData = [
     "check": "〈隠密〉",
     "difficulty": 11,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -1234,6 +1256,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 10,
     "maxProgress": 30,
+    "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
       "required": [
