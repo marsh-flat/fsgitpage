@@ -36,6 +36,10 @@ export const fsData = [
           {
             "title": "情報2",
             "text": "いいいいい"
+          },
+          {
+            "title": "情報3",
+            "text": "えええええ"
           }
         ]
       },
