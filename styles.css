@@ -26,6 +26,11 @@ body {
   line-height: 1.45;
 }
 
+body[data-mode="player"] {
+  height: 100vh;
+  overflow: hidden;
+}
+
 a {
   color: var(--accent);
 }
@@ -163,6 +168,7 @@ body[data-mode="player"] .topbar {
 }
 
 body[data-mode="player"] .player-layout {
+  min-height: 0;
   gap: 0;
 }
 
@@ -185,6 +191,7 @@ body[data-mode="player"] .player-layout {
 }
 
 body[data-mode="player"] .panel {
+  min-height: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -195,8 +202,15 @@ body[data-mode="player"] .panel h2 {
 }
 
 body[data-mode="player"] .scroll {
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
   padding: 0;
+}
+
+body[data-mode="player"] #fs-detail {
+  height: 100%;
+  min-height: 0;
 }
 
 .scroll {
