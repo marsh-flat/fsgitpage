@@ -195,6 +195,7 @@ body[data-mode="player"] .panel h2 {
 }
 
 body[data-mode="player"] .scroll {
+  overflow: hidden;
   padding: 0;
 }
 
@@ -274,6 +275,9 @@ body[data-mode="player"] .scroll {
 }
 
 body[data-mode="player"] .fs-card {
+  height: 100%;
+  min-height: 0;
+  grid-template-rows: auto minmax(0, 1fr);
   gap: 6px;
 }
 
@@ -348,14 +352,20 @@ body[data-mode="player"] .meta {
 }
 
 body[data-mode="player"] .basic-info {
-  position: sticky;
-  top: 0;
   z-index: 5;
   background: var(--bg);
-  padding-bottom: 6px;
+  padding-bottom: 4px;
 }
 
-body[data-mode="player"] .basic-info + div h3 {
+body[data-mode="player"] .fs-scroll-body {
+  min-height: 0;
+  overflow: auto;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+body[data-mode="player"] .fs-scroll-body h3 {
   margin-top: 0;
 }
 

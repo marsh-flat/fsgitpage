@@ -281,14 +281,16 @@ function renderDetail() {
         </table>
       </section>
 
-      <div>
-        <h3>進行値</h3>
-        <div class="milestones">${milestoneHtml || `<p class="hidden-note">開示済みの進行値はまだありません。</p>`}</div>
-      </div>
+      <div class="fs-scroll-body">
+        <div>
+          <h3>進行値</h3>
+          <div class="milestones">${milestoneHtml || `<p class="hidden-note">開示済みの進行値はまだありません。</p>`}</div>
+        </div>
 
-      <div>
-        <h3>結果</h3>
-        <div class="result-grid">${resultHtml || `<p class="hidden-note">結果欄はまだ開示されていません。</p>`}</div>
+        <div>
+          <h3>結果</h3>
+          <div class="result-grid">${resultHtml || `<p class="hidden-note">結果欄はまだ開示されていません。</p>`}</div>
+        </div>
       </div>
     </article>
   `;
