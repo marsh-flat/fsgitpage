@@ -63,6 +63,10 @@ body[data-mode="player"] .app {
   grid-template-rows: auto 1fr;
 }
 
+body[data-mode="player"] .status {
+  display: none;
+}
+
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -311,51 +315,6 @@ body[data-mode="player"] .app {
   color: var(--muted);
 }
 
-.basic-info {
-  display: grid;
-  gap: 8px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #f8fafc;
-}
-
-.basic-info h3 {
-  margin: 0;
-}
-
-.basic-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 7px 12px;
-  font-size: 13px;
-}
-
-.basic-grid div {
-  display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  gap: 6px;
-}
-
-.basic-label {
-  color: #334155;
-  font-weight: 800;
-}
-
-.progress-track {
-  height: 9px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #dbe3ee;
-}
-
-.progress-track span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--accent);
-}
-
 .milestones {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -382,10 +341,66 @@ body[data-mode="player"] .app {
   font-weight: 800;
 }
 
+.milestone-title {
+  margin-top: 6px;
+  font-weight: 800;
+}
+
 .milestone p {
   margin: 5px 0 0;
   color: var(--muted);
   font-size: 13px;
+}
+
+.fs-sheet {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fffdf6;
+  border: 2px solid #1f2933;
+  font-size: 14px;
+}
+
+.fs-sheet th,
+.fs-sheet td {
+  border: 1px solid #1f2933;
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+.fs-sheet th {
+  width: 92px;
+  background: #fbf1d3;
+  text-align: left;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.fs-sheet td {
+  font-weight: 700;
+}
+
+.progress-counter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+}
+
+.progress-counter span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.progress-counter span.current {
+  border: 2px solid #111827;
+  background: #fff;
+  font-weight: 900;
 }
 
 .milestone-rule {
@@ -459,7 +474,6 @@ body[data-mode="player"] .app {
   }
 
   .milestones,
-  .basic-grid,
   .result-grid {
     grid-template-columns: 1fr;
   }

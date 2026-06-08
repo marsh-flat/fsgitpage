@@ -161,10 +161,9 @@ function renderDetail() {
   const fs = fsData.find(item => item.id === selectedFsId) || fsData[0];
   if (!fs) return;
   const current = fsState(fs.id);
-  const requirement = fs.requirement || requirementFor(fs);
-  const baseCheck = fs.check || "1ラウンドに1回、行動内容に合う技能で判定する。判定成功で進行値+1、達成値18以上で+2、25以上で+3。";
-  const progress = Number(current.progress || 0);
-  const progressPercent = Math.min(100, Math.max(0, (progress / 12) * 100));
+  const maxProgress = Number(fs.maxProgress || 30);
+  const progress = Math.min(maxProgress, Number(current.progress || 0));
+  const pcParticipation = formatPcParticipation(fs.pcParticipation);
 
   if (mode === "player" && !current.visible) {
     elements.detail.innerHTML = `<p class="hidden-note">このFSはまだGMから開示されていません。</p>`;
@@ -175,7 +174,7 @@ function renderDetail() {
     const key = String(milestone.value);
     const visible = Boolean(current.milestones?.[key]);
     if (mode === "player" && !visible) return "";
-    const check = milestone.check || `累積進行値が${milestone.value}以上になると開示。判定成功で+1、達成値18以上で+2、25以上で+3。`;
+    const check = formatCheck(milestone.check || fs.check, milestone.difficulty || fs.difficulty);
     const requirement = milestone.requirement || fs.requirement || requirementFor(fs);
     return `
       <div class="milestone ${visible ? "visible" : ""}">
@@ -183,6 +182,7 @@ function renderDetail() {
           <span>進行値 ${milestone.value}</span>
           ${mode === "gm" ? checkboxHtml(`milestone-${key}`, visible, `data-action="milestone" data-value="${key}"`) : ""}
         </div>
+        ${milestone.title ? `<div class="milestone-title">${escapeHtml(milestone.title)}</div>` : ""}
         <p>${escapeHtml(milestone.text)}</p>
         <dl class="milestone-rule">
           <div>
@@ -233,7 +233,7 @@ function renderDetail() {
             </label>
             <label class="field-row">
               <span>現在の達成値</span>
-              <input type="number" min="0" max="12" step="1" value="${progress}" data-action="progress">
+              <input type="number" min="0" max="${maxProgress}" step="1" value="${progress}" data-action="progress">
             </label>
             <button type="button" data-action="open-all">進行値をすべて開示</button>
             <button type="button" data-action="close-all">進行値をすべて非開示</button>
@@ -242,28 +242,34 @@ function renderDetail() {
       </div>
 
       <section class="basic-info">
-        <h3>基本情報</h3>
-        <div class="basic-grid">
-          <div>
-            <span class="basic-label">終了条件</span>
-            <span>${escapeHtml(fs.end)}</span>
-          </div>
-          <div>
-            <span class="basic-label">判定条件</span>
-            <span>${escapeHtml(baseCheck)}</span>
-          </div>
-          <div>
-            <span class="basic-label">要求</span>
-            <span>${escapeHtml(requirement)}</span>
-          </div>
-          <div>
-            <span class="basic-label">現在の達成状況</span>
-            <span>${progress} / 12</span>
-          </div>
-        </div>
-        <div class="progress-track" aria-label="現在の達成状況">
-          <span style="width: ${progressPercent}%"></span>
-        </div>
+        <table class="fs-sheet">
+          <tbody>
+            <tr>
+              <th>名称</th>
+              <td colspan="3">${escapeHtml(fs.title)}</td>
+              <th>終了条件</th>
+              <td>${escapeHtml(fs.end)}</td>
+            </tr>
+            <tr>
+              <th>判定</th>
+              <td>${escapeHtml(fs.check || "任意")}</td>
+              <th>難易度</th>
+              <td>${escapeHtml(fs.difficulty || "-")}</td>
+              <th>最大達成値</th>
+              <td>${maxProgress}</td>
+            </tr>
+            <tr>
+              <th>経験点</th>
+              <td>${escapeHtml(fs.exp || 0)}点</td>
+              <th>PC参加条件</th>
+              <td colspan="3">${escapeHtml(pcParticipation)}</td>
+            </tr>
+            <tr>
+              <th>進行カウンター</th>
+              <td colspan="5">${renderProgressCounter(progress, maxProgress)}</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
 
       <p class="summary">${escapeHtml(fs.summary)}</p>
@@ -307,7 +313,8 @@ async function handleGmChange(fsId, event) {
   } else if (action === "successVisible" || action === "failureVisible") {
     next.fs[fsId][action] = target.checked;
   } else if (action === "progress") {
-    next.fs[fsId].progress = clampProgress(target.value);
+    const fs = fsData.find(item => item.id === fsId);
+    next.fs[fsId].progress = clampProgress(target.value, fs?.maxProgress || 30);
   }
 
   await saveState(next);
@@ -362,7 +369,7 @@ function mergeState(raw) {
 function mergeFsState(value) {
   return {
     visible: Boolean(value?.visible),
-    progress: clampProgress(value?.progress),
+    progress: clampProgress(value?.progress, 99),
     successVisible: Boolean(value?.successVisible),
     failureVisible: Boolean(value?.failureVisible),
     milestones: {
@@ -374,10 +381,10 @@ function mergeFsState(value) {
   };
 }
 
-function clampProgress(value) {
+function clampProgress(value, max) {
   const number = Number(value);
   if (!Number.isFinite(number)) return 0;
-  return Math.max(0, Math.min(12, Math.round(number)));
+  return Math.max(0, Math.min(max, Math.round(number)));
 }
 
 function fsState(id) {
@@ -448,6 +455,29 @@ function requirementFor(fs) {
   };
 
   return requirements[fs.id] || "行動内容に合う技能。目安難易度9。";
+}
+
+function formatCheck(check, difficulty) {
+  if (!check && !difficulty) return "行動内容に合う技能。";
+  if (!difficulty) return check;
+  return `${check} 難易度${difficulty}`;
+}
+
+function formatPcParticipation(participation = {}) {
+  const required = participation.required || [];
+  const recommended = participation.recommended || [];
+  const parts = [];
+  if (required.length) parts.push(`${required.join("・")}参加必須`);
+  if (recommended.length) parts.push(`${recommended.join("・")}参加推奨`);
+  return parts.join(" / ") || "指定なし";
+}
+
+function renderProgressCounter(progress, maxProgress) {
+  const cells = [];
+  for (let index = 1; index <= maxProgress; index += 1) {
+    cells.push(`<span class="${index === progress ? "current" : ""}">${index}</span>`);
+  }
+  return `<div class="progress-counter">${cells.join("")}</div>`;
 }
 
 function escapeHtml(value) {
