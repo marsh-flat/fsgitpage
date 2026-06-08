@@ -19,6 +19,7 @@ let roomRef = null;
 let unsubscribe = null;
 let state = defaultState();
 let activeInfoText = "";
+let showAllFs = false;
 const roomPath = room.replace(/[.#$[\]/]/g, "_");
 
 const elements = {
@@ -29,7 +30,8 @@ const elements = {
   nav: document.getElementById("fs-nav"),
   detail: document.getElementById("fs-detail"),
   playerUrl: document.getElementById("player-url"),
-  copyPlayerUrl: document.getElementById("copy-player-url")
+  copyPlayerUrl: document.getElementById("copy-player-url"),
+  showAllFs: document.getElementById("show-all-fs")
 };
 
 bootstrap();
@@ -85,15 +87,6 @@ async function connectFirebase() {
 
 function renderStaticControls() {
   if (elements.fsSelect) {
-    elements.fsSelect.innerHTML = "";
-    fsData.forEach(fs => {
-      const option = document.createElement("option");
-      option.value = fs.id;
-      option.textContent = `${fs.code} ${fs.title}`;
-      elements.fsSelect.appendChild(option);
-    });
-
-    elements.fsSelect.value = selectedFsId;
     elements.fsSelect.addEventListener("change", () => {
       selectedFsId = elements.fsSelect.value;
       updateUrlParam("fs", selectedFsId);
@@ -108,22 +101,49 @@ function renderStaticControls() {
       await navigator.clipboard?.writeText(elements.playerUrl.value).catch(() => {});
     });
   }
+
+  if (elements.showAllFs) {
+    elements.showAllFs.checked = showAllFs;
+    elements.showAllFs.addEventListener("change", () => {
+      showAllFs = elements.showAllFs.checked;
+      render();
+    });
+  }
 }
 
 function render() {
   if (mode === "player") {
     selectedFsId = activeFsId();
+  } else {
+    const nextSelectedFsId = selectableFsId(selectedFsId);
+    if (nextSelectedFsId !== selectedFsId) {
+      selectedFsId = nextSelectedFsId;
+      updateUrlParam("fs", selectedFsId);
+      updatePlayerUrl();
+    }
   }
   if (elements.fsSelect) {
+    renderFsSelect();
     elements.fsSelect.value = selectedFsId;
   }
   renderNav();
   renderDetail();
 }
 
+function renderFsSelect() {
+  const visibleItems = visibleFsItems();
+  elements.fsSelect.innerHTML = "";
+  visibleItems.forEach(fs => {
+    const option = document.createElement("option");
+    option.value = fs.id;
+    option.textContent = `${fs.code} ${fs.title}`;
+    elements.fsSelect.appendChild(option);
+  });
+}
+
 function renderNav() {
   if (!elements.nav) return;
-  const grouped = groupByScene(fsData);
+  const grouped = groupByScene(visibleFsItems());
   elements.nav.innerHTML = "";
   const activeId = activeFsId();
 
@@ -136,12 +156,21 @@ function renderNav() {
     block.appendChild(title);
 
     items.forEach(fs => {
+      const requiresSuccess = getRequiresSuccess(fs);
       const item = document.createElement("label");
-      item.className = `nav-item ${fs.id === selectedFsId ? "active" : ""} ${fs.id === activeId ? "broadcast" : ""}`;
+      item.className = [
+        "nav-item",
+        fs.id === selectedFsId ? "active" : "",
+        fs.id === activeId ? "broadcast" : "",
+        requiresSuccess.length ? "locked-rule" : ""
+      ].filter(Boolean).join(" ");
       item.innerHTML = `
         <input type="radio" name="active-fs" value="${fs.id}" ${fs.id === activeId ? "checked" : ""}>
         <span class="nav-code">${fs.code}</span>
-        <span class="nav-title">${escapeHtml(fs.title)}</span>
+        <span class="nav-title-wrap">
+          <span class="nav-title">${escapeHtml(fs.title)}</span>
+          ${renderPrerequisiteBadges(requiresSuccess)}
+        </span>
       `;
       item.querySelector("input").addEventListener("change", async () => {
         selectedFsId = fs.id;
@@ -210,22 +239,7 @@ function renderDetail() {
     `;
   }).join("");
 
-  const resultHtml = [
-    { key: "successVisible", label: "成功時", text: fs.success },
-    { key: "failureVisible", label: "失敗時", text: fs.failure }
-  ].map(item => {
-    const visible = Boolean(current[item.key]);
-    if (mode === "player" && !visible) return "";
-    return `
-      <div class="result-card ${visible ? "visible" : ""}">
-        <div class="milestone-head">
-          <span>${item.label}</span>
-          ${mode === "gm" ? checkboxHtml(item.key, visible, `data-action="${item.key}"`) : ""}
-        </div>
-        <p>${escapeHtml(item.text)}</p>
-      </div>
-    `;
-  }).join("");
+  const resultHtml = renderResult(fs, current);
 
   elements.detail.innerHTML = `
     <article class="fs-card">
@@ -295,7 +309,7 @@ function renderDetail() {
 
         <div>
           <h3>結果</h3>
-          <div class="result-grid">${resultHtml || `<p class="hidden-note">結果欄はまだ開示されていません。</p>`}</div>
+          ${resultHtml}
         </div>
       </div>
     </article>
@@ -350,6 +364,60 @@ function renderMilestoneInfos(fsId, milestoneKey, milestone, current) {
   return buttons ? `<div class="info-chips">${buttons}</div>` : "";
 }
 
+function renderResult(fs, current) {
+  const status = current.resultStatus || "pending";
+  if (mode === "gm") {
+    return `
+      <div class="result-control">
+        <label class="result-option ${status === "pending" ? "active" : ""}">
+          <input type="radio" name="result-status-${fs.id}" value="pending" data-action="resultStatus" ${status === "pending" ? "checked" : ""}>
+          <span>処理前</span>
+        </label>
+        <label class="result-option ${status === "success" ? "active" : ""}">
+          <input type="radio" name="result-status-${fs.id}" value="success" data-action="resultStatus" ${status === "success" ? "checked" : ""}>
+          <span>成功</span>
+        </label>
+        <label class="result-option ${status === "failure" ? "active" : ""}">
+          <input type="radio" name="result-status-${fs.id}" value="failure" data-action="resultStatus" ${status === "failure" ? "checked" : ""}>
+          <span>失敗</span>
+        </label>
+      </div>
+      <div class="result-grid">
+        <div class="result-card ${status === "success" ? "visible" : ""}">
+          <div class="milestone-head"><span>成功</span></div>
+          <p>${escapeHtml(fs.success)}</p>
+        </div>
+        <div class="result-card ${status === "failure" ? "visible" : ""}">
+          <div class="milestone-head"><span>失敗</span></div>
+          <p>${escapeHtml(fs.failure)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  if (status === "success") {
+    return `
+      <div class="result-grid">
+        <div class="result-card visible">
+          <div class="milestone-head"><span>成功</span></div>
+          <p>${escapeHtml(fs.success)}</p>
+        </div>
+      </div>
+    `;
+  }
+  if (status === "failure") {
+    return `
+      <div class="result-grid">
+        <div class="result-card visible">
+          <div class="milestone-head"><span>失敗</span></div>
+          <p>${escapeHtml(fs.failure)}</p>
+        </div>
+      </div>
+    `;
+  }
+  return `<p class="hidden-note">結果欄はまだ開示されていません。</p>`;
+}
+
 function checkboxHtml(id, checked, attrs) {
   return `<input type="checkbox" id="${id}" ${attrs} ${checked ? "checked" : ""}>`;
 }
@@ -370,6 +438,8 @@ async function handleGmChange(fsId, event) {
   } else if (action === "info") {
     next.fs[fsId].infos[target.dataset.value] ??= {};
     next.fs[fsId].infos[target.dataset.value][target.dataset.infoIndex] = target.checked;
+  } else if (action === "resultStatus") {
+    next.fs[fsId].resultStatus = normalizeResultStatus(target.value);
   } else if (action === "successVisible" || action === "failureVisible") {
     next.fs[fsId][action] = target.checked;
   } else if (action === "progress") {
@@ -407,7 +477,7 @@ async function handleDetailClick(event) {
   const fs = fsData.find(item => item.id === fsId);
   const next = structuredClone(state);
   next.fs ??= {};
-  next.fs[fsId] = mergeFsState(next.fs[fsId]);
+  next.fs[fsId] = mergeFsState(next.fs[fsId], fs);
   fs.milestones.forEach(milestone => {
     next.fs[fsId].milestones[String(milestone.value)] = action === "open-all";
   });
@@ -491,11 +561,24 @@ function mergeFsState(value, fs = null) {
   return {
     visible: Boolean(value?.visible),
     progress: clampProgress(value?.progress, 99),
+    resultStatus: resolveResultStatus(value),
     successVisible: Boolean(value?.successVisible),
     failureVisible: Boolean(value?.failureVisible),
     milestones: milestoneState,
     infos: infoState
   };
+}
+
+function resolveResultStatus(value) {
+  const status = normalizeResultStatus(value?.resultStatus);
+  if (status !== "pending") return status;
+  if (value?.successVisible) return "success";
+  if (value?.failureVisible) return "failure";
+  return "pending";
+}
+
+function normalizeResultStatus(value) {
+  return value === "success" || value === "failure" ? value : "pending";
 }
 
 function clampProgress(value, max) {
@@ -511,6 +594,39 @@ function fsState(id) {
 
 function activeFsId() {
   return fsData.some(fs => fs.id === state.activeFsId) ? state.activeFsId : fsData[0]?.id;
+}
+
+function selectableFsId(id) {
+  const visibleItems = visibleFsItems();
+  if (visibleItems.some(fs => fs.id === id)) return id;
+  return visibleItems[0]?.id || fsData[0]?.id;
+}
+
+function visibleFsItems() {
+  return fsData.filter(fs => showAllFs || isFsUnlocked(fs));
+}
+
+function isFsUnlocked(fs) {
+  return getRequiresSuccess(fs).every(id => isFsSuccessful(id));
+}
+
+function isFsSuccessful(id) {
+  const fs = fsData.find(item => item.id === id);
+  return fsState(fs?.id || id).resultStatus === "success";
+}
+
+function getRequiresSuccess(fs) {
+  const value = fs.requiresSuccess || fs.requires_success || fs.prerequisites || [];
+  return Array.isArray(value) ? value.map(String).filter(Boolean) : [];
+}
+
+function renderPrerequisiteBadges(ids) {
+  if (!ids.length) return "";
+  const badges = ids.map(id => {
+    const satisfied = isFsSuccessful(id);
+    return `<span class="req-badge ${satisfied ? "ok" : "missing"}">${escapeHtml(id)}</span>`;
+  }).join("");
+  return `<span class="req-badges">${badges}</span>`;
 }
 
 function updatePlayerUrl() {

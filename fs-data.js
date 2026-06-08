@@ -18,6 +18,7 @@ export const fsData = [
         "PC4"
       ]
     },
+    "requiresSuccess": [],
     "summary": "現時点で脱出するのではなく、緊急時に使える経路、協力者、隠れ場所をあらかじめ確保する。 物資搬入口、旧インフラ、スラムの荷運び路、現地協力者をつなぎ、いざという時の退避計画を作る。 PC4(UGN2)は沓木麻衣子の手引きと先行潜入の経験を使えるため相性がよい。",
     "milestones": [
       {
@@ -88,6 +89,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "孤児院周辺に展開するGPO過激派を、手続き、保護記録、通信照会、現場判断の遅延によって遠ざける。\nPC3(GPO)はGPO職員として相性がよい。\nただし、過激派と直接衝突するとPC3への疑念が強まる。",
     "milestones": [
       {
@@ -149,6 +151,7 @@ export const fsData = [
         "PC2"
       ]
     },
+    "requiresSuccess": [],
     "summary": "ストレンジャーズがどの危険度まで黙認し、どこから封鎖維持を優先して介入するかを読む。\nPC2(UGN1)はストレンジャーズの客である腕章、逐次報告回線、危険度観測ログを使えるため相性がよい。",
     "milestones": [
       {
@@ -208,6 +211,7 @@ export const fsData = [
       "required": [],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "ライオットへ陽動協力を頼む。\nPC1(孤児)はライオットと相性がよい。\nただし、ライオットを動かすほどGPOとの関係が悪化するリスクがある。",
     "milestones": [
       {
@@ -269,6 +273,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "蓮見咲を通じ、GPO穏健派に過激派の命令系統を乱すための後方支援を頼む。\nPC3(GPO)はGPO穏健派と相性がよい。\n失敗すると過激派の抵抗が激しくなるリスクがある。",
     "milestones": [
       {
@@ -330,6 +335,7 @@ export const fsData = [
         "PC1"
       ]
     },
+    "requiresSuccess": [],
     "summary": "孤児院へ突入するのではなく、孤児院周辺へ安全に近づく経路を押さえる。\n正規の保護活動、裏口、物資導線、スラム経由のどれを使えるかを調べる。",
     "milestones": [
       {
@@ -392,6 +398,7 @@ export const fsData = [
         "PC4"
       ]
     },
+    "requiresSuccess": [],
     "summary": "デモンズレネゲイド症の子どもたちが孤児院内のどこにいるか、どの程度動かせる状態かを把握する。\n後の救出判断に必要な情報を集める。",
     "milestones": [
       {
@@ -453,6 +460,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "礼拝堂事故、ステンドグラス、PC1(孤児)の転移、セラの異常をつなげて調べる。\nセラを傷つけずに助けるため、異常反応の性質を見極める。",
     "milestones": [
       {
@@ -515,6 +523,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "GPO過激派を遠ざけきれなかった場合、孤児院周辺には検問と現場部隊が残っている。\nPCたちは医療搬送の名目、GPO手続き、実力行使を組み合わせて、孤児院内部への入口を開く。\nこのFSでは、孤児を実際に救出する前に、孤児院へ踏み込むための突破口を作る。",
     "milestones": [
       {
@@ -574,6 +583,7 @@ export const fsData = [
       "required": [],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "GPOの圧力が崩れた瞬間、またはPCたちが救出を諦めて離脱へ傾いた瞬間、FHが動く。\nFHは孤児院の子ども、PC1(孤児)、アズラエルのいずれかを奪うため、火事場に割り込んでくる。\nこのFSでは、FHの初撃をしのぎ、次のウェーブへ進むための態勢を立て直す。",
     "milestones": [
       {
@@ -636,6 +646,9 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [
+      "B2"
+    ],
     "summary": "まだ脱出は行わない。\n孤児院内の子どもたちを、移動可能な子、医療が必要な子、動かせない子に分け、後の搬送判断に備える。",
     "milestones": [
       {
@@ -695,6 +708,9 @@ export const fsData = [
       "required": [],
       "recommended": []
     },
+    "requiresSuccess": [
+      "A4"
+    ],
     "summary": "ライオットがスラム側で陽動を起こし、GPO過激派やFHの目を逸らす。\nPC1(孤児)はライオットとの相性がよい。\n支援系エフェクトで陽動の安全確保、負傷者保護、通信攪乱、群衆誘導を行える。\n失敗するとGPOとの関係が悪化する。",
     "milestones": [
       {
@@ -756,6 +772,9 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [
+      "A5"
+    ],
     "summary": "GPO穏健派が別件の照会、保護記録確認、命令系統の再確認を仕掛け、過激派の動きを鈍らせる。\nPC3(GPO)はGPO穏健派との相性がよい。\n支援系エフェクトで通信保護、書類照合、医療判定、現場指揮を補助できる。\n失敗すると過激派の抵抗が激しくなる。",
     "milestones": [
       {
@@ -817,6 +836,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "孤児院の礼拝堂で、セラはアズラエルと融合している。\nこのFSは、アズラエル融合体との戦闘中に同時進行する。\nPCたちは戦闘で融合体を無力化しながら、FSで異常なレネゲイド反応を隠蔽し、無力化後にセラを分離する。",
     "milestones": [
       {
@@ -878,6 +898,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "孤児院への突入に失敗した場合、アズラエルと一体化したセラは旧教会区画側へ現れる。\nこのFSは、アズラエル融合体との戦闘中に同時進行する。\nPCたちは戦闘で融合体を無力化しながら、FSで開けた廃墟に広がる異常反応を隠蔽し、無力化後にセラを分離する。",
     "milestones": [
       {
@@ -939,6 +960,9 @@ export const fsData = [
         "PC2"
       ]
     },
+    "requiresSuccess": [
+      "A3"
+    ],
     "summary": "アズラエル融合体との戦闘で発生する異常レネゲイド反応を、封鎖破綻級の脅威ではなく、局所的な救護作戦上の危険として整理する。\nPC2(UGN1)はストレンジャーズの客としての腕章、逐次報告回線、危険度観測ログを使えるため相性がよい。\n成功するとストレンジャーズの急襲が発生しづらくなる。",
     "milestones": [
       {
@@ -998,6 +1022,10 @@ export const fsData = [
       "required": [],
       "recommended": []
     },
+    "requiresSuccess": [
+      "A4",
+      "C14"
+    ],
     "summary": "ライオットが周辺で騒乱や避難誘導を続け、GPOやFHの増援を引きつける。\nPC1(孤児)はライオット側に言葉が届きやすい。\n支援系エフェクトで陽動側の被害軽減、通信妨害、群衆の保護を行える。\n失敗するとGPOとの関係が悪化する。",
     "milestones": [
       {
@@ -1059,6 +1087,10 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [
+      "A5",
+      "C15"
+    ],
     "summary": "GPO穏健派が過激派の増援命令や現場判断を遅らせる。\nPC3(GPO)はGPO穏健派との相性がよい。\n支援系エフェクトで通信暗号化、記録照合、医療保護の正当化を補助できる。\n失敗すると過激派の抵抗が激化する。",
     "milestones": [
       {
@@ -1118,6 +1150,7 @@ export const fsData = [
       "required": [],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "セラを分離できているが、緊急退避計画がない場合、PCたちはその場で退避路を組み立てることもできる。\nこれは準備済みの経路ではなく、場当たりの判断であり、成功しても危険は大きい。",
     "milestones": [
       {
@@ -1179,6 +1212,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "セラを分離できているが、緊急退避計画がない場合、PCたちは正門から突破する選択を取れる。\nこれは記録に残る強行突破であり、ストレンジャーズ、GPO、ホワイトハンドのすべてに説明責任が発生する。",
     "milestones": [
       {
@@ -1241,6 +1275,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "セラをアズラエルから分離できなかった場合、ストレンジャーズは封鎖維持を優先する。\n孤児院は危険区域として急襲され、爆破処理の対象になる。\nこのFSでは、PCたちは全員救出ではなく、限られた時間で子どもたちをトリアージする。",
     "milestones": [
       {
@@ -1300,6 +1335,7 @@ export const fsData = [
       "required": [],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "セラを分離し、緊急退避計画も確保している場合、最大の脅威はFHの追撃となる。\nFHはセラ、PC1(孤児)、アズラエルの残滓を狙い、退避経路へ追いすがる。",
     "milestones": [
       {
@@ -1361,6 +1397,7 @@ export const fsData = [
       ],
       "recommended": []
     },
+    "requiresSuccess": [],
     "summary": "封鎖線維持を優先するストレンジャーズの監視、警告、封鎖誘導の中で、医療搬送として通せる範囲を見極めて脱出する。\nPC2(UGN1)はストレンジャーズの客としての腕章、逐次報告、危険度観測の立場を使えるため相性がよい。\n支援系エフェクトで子どもたちの容体安定、搬送列の保護、通信の整理、誤認防止を補助できる。",
     "milestones": [
       {
