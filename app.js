@@ -175,7 +175,7 @@ function renderDetail() {
     const visible = Boolean(current.milestones?.[key]);
     if (mode === "player" && !visible) return "";
     const check = formatCheck(milestone.check || fs.check, milestone.difficulty || fs.difficulty);
-    const requirement = milestone.requirement || fs.requirement || requirementFor(fs);
+    const requirement = milestone.requirement || "指定なし";
     return `
       <div class="milestone ${visible ? "visible" : ""}">
         <div class="milestone-head">
@@ -425,36 +425,6 @@ function groupByScene(items) {
     acc[fs.sceneName].push(fs);
     return acc;
   }, {});
-}
-
-function requirementFor(fs) {
-  const requirements = {
-    A1: "〈情報：裏社会〉〈知覚〉〈調達〉。目安難易度9。",
-    A2: "〈交渉〉〈情報：GPO〉【社会】。目安難易度9。",
-    A3: "〈情報：ストレンジャーズ〉〈知識：レネゲイド〉〈交渉〉。目安難易度9。",
-    A4: "〈交渉〉〈情報：裏社会〉【社会】。目安難易度9。",
-    A5: "〈交渉〉〈情報：GPO〉〈調達〉。目安難易度9。",
-    B1: "〈知覚〉〈情報：裏社会〉〈隠密〉。目安難易度9。",
-    B2: "〈情報：UGN〉〈医学〉〈知覚〉。目安難易度9。",
-    B3: "〈RC〉〈知識：レネゲイド〉〈意志〉。目安難易度9。",
-    C11: "〈白兵〉〈射撃〉〈回避〉〈運転〉。目安難易度10。",
-    C12: "〈白兵〉〈射撃〉〈RC〉〈回避〉。目安難易度10。",
-    C13: "〈医学〉〈交渉〉〈意志〉〈知覚〉。目安難易度10。",
-    C14: "〈交渉〉〈情報：裏社会〉〈運転〉。目安難易度10。",
-    C15: "〈交渉〉〈情報：GPO〉〈調達〉。目安難易度10。",
-    C21: "〈RC〉〈知識：レネゲイド〉〈意志〉。目安難易度11。",
-    C22: "〈RC〉〈知識：レネゲイド〉〈意志〉。目安難易度11。",
-    C23: "〈情報：ストレンジャーズ〉〈交渉〉〈知識：レネゲイド〉。目安難易度10。",
-    C24: "〈交渉〉〈情報：裏社会〉〈運転〉。目安難易度10。",
-    C25: "〈交渉〉〈情報：GPO〉〈調達〉。目安難易度10。",
-    D1A: "〈知覚〉〈運転〉〈情報：裏社会〉〈交渉〉。目安難易度11。",
-    D1B: "〈白兵〉〈射撃〉〈運転〉〈交渉〉。目安難易度11。",
-    D2: "〈医学〉〈意志〉〈知覚〉〈交渉〉。目安難易度11。",
-    D3: "〈白兵〉〈射撃〉〈RC〉〈運転〉。目安難易度11。",
-    D4: "〈交渉〉〈情報：ストレンジャーズ〉〈医学〉。目安難易度11。"
-  };
-
-  return requirements[fs.id] || "行動内容に合う技能。目安難易度9。";
 }
 
 function formatCheck(check, difficulty) {
