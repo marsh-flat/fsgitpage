@@ -273,11 +273,13 @@ function renderDetail() {
               <th>進行カウンター</th>
               <td colspan="5">${renderProgressCounter(progress, targetProgress)}</td>
             </tr>
+            <tr>
+              <th>概要</th>
+              <td colspan="5">${escapeHtml(fs.summary)}</td>
+            </tr>
           </tbody>
         </table>
       </section>
-
-      <p class="summary">${escapeHtml(fs.summary)}</p>
 
       <div>
         <h3>進行値</h3>

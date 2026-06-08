@@ -273,6 +273,10 @@ body[data-mode="player"] .scroll {
   gap: 10px;
 }
 
+body[data-mode="player"] .fs-card {
+  gap: 6px;
+}
+
 .fs-head {
   display: flex;
   justify-content: space-between;
@@ -341,6 +345,18 @@ body[data-mode="player"] .meta {
 
 .summary {
   color: var(--muted);
+}
+
+body[data-mode="player"] .basic-info {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  padding-bottom: 6px;
+}
+
+body[data-mode="player"] .basic-info + div h3 {
+  margin-top: 0;
 }
 
 .milestones {
