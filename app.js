@@ -165,6 +165,14 @@ function renderDetail() {
   const targetProgress = Number(fs.targetProgress || maxProgress);
   const progress = Math.min(targetProgress, Number(current.progress || 0));
   const pcParticipation = formatPcParticipation(fs.pcParticipation);
+  const gmOnlyRuleRow = mode === "gm" ? `
+            <tr>
+              <th>経験点</th>
+              <td>${escapeHtml(fs.exp || 0)}点</td>
+              <th>目標進行値</th>
+              <td>${targetProgress}</td>
+            </tr>
+  ` : "";
 
   if (mode === "player" && !current.visible) {
     elements.detail.innerHTML = `<p class="hidden-note">このFSはまだGMから開示されていません。</p>`;
@@ -259,12 +267,7 @@ function renderDetail() {
               <th>最大達成値</th>
               <td>${maxProgress}</td>
             </tr>
-            <tr>
-              <th>経験点</th>
-              <td>${escapeHtml(fs.exp || 0)}点</td>
-              <th>目標進行値</th>
-              <td>${targetProgress}</td>
-            </tr>
+            ${gmOnlyRuleRow}
             <tr>
               <th>PC参加条件</th>
               <td colspan="5">${escapeHtml(pcParticipation)}</td>
