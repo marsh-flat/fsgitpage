@@ -285,7 +285,7 @@ function renderDetail() {
             </tr>
             ${gmOnlyRuleRow}
             <tr>
-              <th>PC参加条件</th>
+              <th>条件</th>
               <td colspan="5">${escapeHtml(pcParticipation)}</td>
             </tr>
             <tr>
@@ -671,7 +671,7 @@ function formatPcParticipation(participation = {}) {
   const recommended = participation.recommended || [];
   const parts = [];
   if (required.length) parts.push(`${required.join("・")}参加必須`);
-  if (recommended.length) parts.push(`${recommended.join("・")}参加推奨`);
+  if (recommended.length) parts.push(recommended.join("・"));
   return parts.join(" / ") || "指定なし";
 }
 
