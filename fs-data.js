@@ -27,7 +27,16 @@ export const fsData = [
         "check": "〈知覚〉",
         "difficulty": 8,
         "requirement": "PC4(UGN2)が参加している場合：〈知覚〉または〈調達〉 難易度7でも判定できる。",
-        "infos": []
+        "infos": [
+          {
+            "title": "情報1",
+            "text": "あああああ"
+          },
+          {
+            "title": "情報2",
+            "text": "いいいいい"
+          }
+        ]
       },
       {
         "value": 6,
