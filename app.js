@@ -229,8 +229,7 @@ function renderDetail() {
             <dt>判定条件</dt>
             <dd>${escapeHtml(check)}</dd>
           </div>
-          <div>
-            <dt>要求</dt>
+          <div class="rule-value-only">
             <dd>${escapeHtml(requirement)}</dd>
           </div>
         </dl>
