@@ -6,10 +6,10 @@
   --muted: #65758b;
   --line: #d8e0ea;
   --soft: #edf3f8;
-  --accent: #0f766e;
-  --accent-soft: #d8f3ee;
-  --warn: #a16207;
-  --warn-soft: #fff5d6;
+  --accent: #374151;
+  --accent-soft: #e5e7eb;
+  --warn: #4b5563;
+  --warn-soft: #f3f4f6;
   --danger: #b91c1c;
 }
 
@@ -60,10 +60,16 @@ button:hover {
 }
 
 body[data-mode="player"] .app {
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 1fr;
+  padding: 6px;
+  gap: 0;
 }
 
 body[data-mode="player"] .status {
+  display: none;
+}
+
+body[data-mode="player"] .topbar {
   display: none;
 }
 
@@ -156,6 +162,10 @@ body[data-mode="player"] .status {
   grid-template-columns: minmax(0, 1fr);
 }
 
+body[data-mode="player"] .player-layout {
+  gap: 0;
+}
+
 .panel {
   min-height: 0;
   border: 1px solid var(--line);
@@ -172,6 +182,20 @@ body[data-mode="player"] .status {
   font-size: 15px;
   background: var(--soft);
   border-bottom: 1px solid var(--line);
+}
+
+body[data-mode="player"] .panel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+body[data-mode="player"] .panel h2 {
+  display: none;
+}
+
+body[data-mode="player"] .scroll {
+  padding: 0;
 }
 
 .scroll {
@@ -273,6 +297,10 @@ body[data-mode="player"] .status {
   font-size: 12px;
 }
 
+body[data-mode="player"] .meta {
+  display: none;
+}
+
 .gm-box {
   display: grid;
   gap: 8px;
@@ -355,21 +383,21 @@ body[data-mode="player"] .status {
 .fs-sheet {
   width: 100%;
   border-collapse: collapse;
-  background: #fffdf6;
-  border: 2px solid #1f2933;
+  background: #fff;
+  border: 2px solid #111827;
   font-size: 14px;
 }
 
 .fs-sheet th,
 .fs-sheet td {
-  border: 1px solid #1f2933;
+  border: 1px solid #111827;
   padding: 6px 8px;
   vertical-align: middle;
 }
 
 .fs-sheet th {
   width: 92px;
-  background: #fbf1d3;
+  background: #f3f4f6;
   text-align: left;
   font-weight: 900;
   white-space: nowrap;
@@ -404,13 +432,14 @@ body[data-mode="player"] .status {
 }
 
 .progress-counter span.target {
-  color: #047857;
+  color: #111827;
   font-weight: 900;
+  background: #e5e7eb;
 }
 
 .progress-counter span.current.target {
-  border-color: #047857;
-  background: #ecfdf5;
+  border-color: #111827;
+  background: #d1d5db;
 }
 
 .milestone-rule {
