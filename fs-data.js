@@ -14,7 +14,6 @@ export const fsData = [
     "pcParticipation": {
       "required": [],
       "recommended": [
-        "PC1",
         "PC4は事前調査資料あり。達成値+2"
       ]
     },
