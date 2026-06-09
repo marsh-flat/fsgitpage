@@ -57,7 +57,7 @@ export const fsData = [
     "exp": 4,
     "pcParticipation": {
       "required": [
-        "PC3"
+        null
       ],
       "recommended": [
         "PC3はGPO職員としての人脈がある。どの進行でも達成値+2。"
