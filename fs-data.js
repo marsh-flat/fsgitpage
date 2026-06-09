@@ -24,7 +24,7 @@ export const fsData = [
         "text": "物資搬入用チューブに近い保守通路を発見。とりあえず人目は避けられる。都合良いエリアに抜けているとよいが…",
         "check": "〈知覚〉",
         "difficulty": 6,
-        "requirement": "None",
+        "requirement": "[]",
         "infos": []
       },
       {
@@ -66,7 +66,7 @@ export const fsData = [
         "text": "過激派の隊員は、表向きには確認任務として孤児院に集まっている。",
         "check": "〈情報：GPO〉",
         "difficulty": 9,
-        "requirement": "None",
+        "requirement": "[]",
         "infos": []
       },
       {
@@ -140,28 +140,28 @@ export const fsData = [
     "pcParticipation": {
       "required": [],
       "recommended": [
-        "PC1"
+        []
       ]
     },
     "requiresSuccess": [],
-    "summary": "孤児院周辺へ安全に近づく経路を押さえる。\n正規の保護活動、裏口、物資導線、スラム経由のどれを使えるかを調べる。",
+    "summary": "孤児院周辺へ安全に近づく経路を押さえる。 正規の保護活動、裏口、物資導線、スラム経由のどれを使えるかを調べる。",
     "milestones": [
       {
         "value": 2,
         "title": "孤児院周辺の人目を読む。",
         "text": "GPO、住民、孤児院関係者の視線がどこに集まっているかを掴む。",
-        "check": "〈知覚〉",
+        "check": "〈情報:裏社会〉",
         "difficulty": 9,
-        "requirement": "",
+        "requirement": "スラムでの判定。",
         "infos": []
       },
       {
         "value": 4,
         "title": "監視の薄いタイミングを見つける。",
         "text": "GPO過激派やFHの目が逸れる瞬間を探す。",
-        "check": "〈知覚〉",
-        "difficulty": 10,
-        "requirement": "",
+        "check": "〈RC〉",
+        "difficulty": 8,
+        "requirement": "スラムでの判定。",
         "infos": []
       }
     ],
@@ -189,23 +189,23 @@ export const fsData = [
       ]
     },
     "requiresSuccess": [],
-    "summary": "デモンズレネゲイド症の子どもたちが孤児院内のどこにいるか、どの程度動かせる状態かを把握する。\n後の救出判断に必要な情報を集める。",
+    "summary": "デモンズレネゲイド症の子どもたちが孤児院内のどこにいるか、どの程度動かせる状態かを把握する。 後の救出判断に必要な情報を集める。",
     "milestones": [
       {
         "value": 2,
-        "title": "子どもたちの居場所を絞る。",
-        "text": "生活棟、医務室、食堂、礼拝堂周辺のどこにいるかを押さえる。",
-        "check": "〈知覚〉または〈情報：噂話〉",
-        "difficulty": 2,
-        "requirement": "",
+        "title": "PC1(孤児)の記憶を整理する。",
+        "text": "当時の状況を思い出す。",
+        "check": "〈感覚〉 または〈知識：医療〉",
+        "difficulty": 9,
+        "requirement": "PC1は参加必須",
         "infos": []
       },
       {
         "value": 4,
-        "title": "避難準備の優先順位を作る。",
-        "text": "全員を同時に動かせるとは限らない。誰から動かすかを決める。",
-        "check": "〈意志〉または〈知識：医療〉",
-        "difficulty": 4,
+        "title": "子どもたちの居場所を絞る。",
+        "text": "孤児院に出入りのある人に生活棟、医務室、食堂、礼拝堂周辺のどこにいるかを押さえる。",
+        "check": "〈知覚〉または〈情報：噂話〉",
+        "difficulty": 2,
         "requirement": "",
         "infos": []
       }
