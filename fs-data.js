@@ -359,7 +359,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 10,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -422,7 +422,7 @@ export const fsData = [
     "check": "〈知覚〉",
     "difficulty": 10,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [],
