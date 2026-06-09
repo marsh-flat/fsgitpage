@@ -439,7 +439,7 @@ export const fsData = [
         "text": "FHは子どもをさらうため、短時間で対象を絞ろうとする。",
         "check": "【肉体】または〈交渉〉",
         "difficulty": 6,
-        "requirement": "PC1(孤児)が参加している場合：自分を囮にする【精神】 難易度12でも判定できる。 PC4(UGN2)：現地UGNの退路を使う〈隠密〉 難易度9でも判定できる。",
+        "requirement": "",
         "infos": []
       }
     ],
@@ -483,7 +483,7 @@ export const fsData = [
         "text": "デモンズレネゲイド症の子どもたちを、すぐ動かせるかどうかで分ける。",
         "check": "〈知識：医療〉",
         "difficulty": 9,
-        "requirement": "支援系エフェクトを使う場合：容体安定、不安の緩和、応急処置を演出できる。",
+        "requirement": "",
         "infos": []
       },
       {
