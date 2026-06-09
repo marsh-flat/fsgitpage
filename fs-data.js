@@ -355,7 +355,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 10,
     "maxProgress": 30,
-    "targetProgress": 6,
+    "targetProgress": 8,
     "exp": 5,
     "pcParticipation": {
       "required": [],
@@ -365,7 +365,7 @@ export const fsData = [
     "summary": "GPO過激派を遠ざけきれなかった場合、孤児院周辺には検問と現場部隊が残っている。 PCたちは医療搬送の名目、GPO手続き、実力行使を組み合わせて、孤児院内部への入口を開く。 このFSでは、孤児を実際に救出する前に、孤児院へ踏み込むための突破口を作る。GPO穏健派が共闘している場合は判定+3 ライオットが共闘している場合は判定+1",
     "milestones": [
       {
-        "value": 3,
+        "value": 2,
         "title": "検問線へ到達する。",
         "text": "GPO過激派は「児童保護施設の再審査」を名目に、正門と裏手を押さえている。",
         "check": "〈交渉〉",
@@ -374,16 +374,16 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 6,
+        "value": 4,
         "title": "衝突が始まる。",
         "text": "過激派の一部が強硬手段に移る。警告弾、封鎖用ドローン、簡易バリケードが孤児院への接近を阻む。",
         "check": "【肉体】または〈回避〉",
-        "difficulty": 10,
-        "requirement": "PC1(孤児)が参加している場合：スラムの抜け道を使う〈知覚〉 難易度9でも判定できる。\nPC4(UGN2)：〈隠密〉 難易度9でも判定できる。",
+        "difficulty": 12,
+        "requirement": "PC1(孤児)が参加している場合：スラムの抜け道を使う〈知覚〉 難易度9でも判定できる。",
         "infos": []
       },
       {
-        "value": 9,
+        "value": 6,
         "title": "入口を押し開き孤児院内部へ突入する。",
         "text": "正門は危険だが、搬入口、礼拝堂脇、裏庭のどれかに隙が生じる。",
         "check": "【肉体】または〈交渉〉",
@@ -406,7 +406,7 @@ export const fsData = [
     "check": "〈知覚〉",
     "difficulty": 10,
     "maxProgress": 30,
-    "targetProgress": 6,
+    "targetProgress": null,
     "exp": 5,
     "pcParticipation": {
       "required": [],
@@ -416,39 +416,30 @@ export const fsData = [
     "summary": "GPOの圧力が崩れた瞬間、またはPCたちが救出を諦めて離脱へ傾いた瞬間、FHが動く。 FHは孤児院の子ども、PC1(孤児)、アズラエルのいずれかを奪うため、火事場に割り込んでくる。 このFSでは、FHの初撃をしのぎ、次のウェーブへ進むための態勢を立て直す。GPO穏健派が共闘している場合は判定+1 ライオットが共闘している場合は判定+3",
     "milestones": [
       {
-        "value": 3,
+        "value": 2,
         "title": "強襲の兆候を捉える。",
         "text": "路地の奥で通信妨害が走り、FHの工作員が孤児院へ向かう導線を塞ぐ。",
         "check": "〈知覚〉",
-        "difficulty": 10,
-        "requirement": "PC4(UGN2)：〈隠密〉または〈情報：UGN〉 難易度8でも判定できる。\nPC1(孤児)が参加している場合：スラムの違和感を読む〈知覚〉 難易度9でも判定できる。",
+        "difficulty": 4,
+        "requirement": "",
         "infos": []
       },
       {
         "value": 6,
         "title": "初撃をしのぐ。",
-        "text": "FHは煙幕、幻覚、偽装した搬送車でPCたちの判断を乱す。\n攻撃判定：FHの陽動部隊を攻撃する。FH強襲部隊の回避は4dx+2、装甲値は3。適用ダメージに応じて進行値が上がる。",
-        "check": "【精神】または〈回避〉",
+        "text": "FHは煙幕、幻覚、偽装した搬送車でPCたちの判断を乱す。",
+        "check": "【肉体】または〈回避〉",
         "difficulty": 10,
-        "requirement": "PC2(UGN1)が参加している場合：危険度報告込みの【社会】 難易度9でも判定できる。\nPC3(GPO)：GPO通信網で民間人退避を指示する【社会】 難易度9でも判定できる。",
+        "requirement": "",
         "infos": []
       },
       {
         "value": 9,
         "title": "奪取部隊を押し返す。",
-        "text": "FHは子どもかPC1(孤児)をさらうため、短時間で対象を絞ろうとする。\n攻撃判定：FHの奪取部隊を攻撃する。FH強襲部隊の回避は4dx+2、装甲値は3。適用ダメージに応じて進行値が上がる。",
+        "text": "FHは子どもをさらうため、短時間で対象を絞ろうとする。",
         "check": "【肉体】または〈交渉〉",
-        "difficulty": 11,
-        "requirement": "PC1(孤児)が参加している場合：自分を囮にする【精神】 難易度12でも判定できる。\nPC4(UGN2)：現地UGNの退路を使う〈隠密〉 難易度9でも判定できる。",
-        "infos": []
-      },
-      {
-        "value": 12,
-        "title": "強襲を退ける。",
-        "text": "",
-        "check": "",
-        "difficulty": null,
-        "requirement": "PCたちはFHの初撃をしのぎ、次のウェーブへ進む。",
+        "difficulty": 6,
+        "requirement": "PC1(孤児)が参加している場合：自分を囮にする【精神】 難易度12でも判定できる。 PC4(UGN2)：現地UGNの退路を使う〈隠密〉 難易度9でも判定できる。",
         "infos": []
       }
     ],
@@ -466,7 +457,7 @@ export const fsData = [
     "check": "〈知識：医療〉",
     "difficulty": 9,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 8,
     "exp": 5,
     "pcParticipation": {
       "required": [],
@@ -475,10 +466,10 @@ export const fsData = [
     "requiresSuccess": [
       "B2"
     ],
-    "summary": "まだ脱出は行わない。 孤児院内の子どもたちを、移動可能な子、医療が必要な子、動かせない子に分け、後の搬送判断に備える。",
+    "summary": "孤児院内の子どもたちを、移動可能な子、医療が必要な子、動かせない子に分け、後の搬送判断に備える。",
     "milestones": [
       {
-        "value": 3,
+        "value": 2,
         "title": "子どもたちのいる場所へ近づく。",
         "text": "泣き声、咳、職員の足音が、孤児院内の混乱を伝えてくる。",
         "check": "〈知覚〉",
@@ -487,7 +478,7 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 6,
+        "value": 4,
         "title": "容体を確認する。",
         "text": "デモンズレネゲイド症の子どもたちを、すぐ動かせるかどうかで分ける。",
         "check": "〈知識：医療〉",
@@ -496,7 +487,7 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 12,
+        "value": 6,
         "title": "搬送準備を整える。",
         "text": "担架、毛布、識別札、簡易記録を揃える。",
         "check": "〈調達〉または〈知識：医療〉",
