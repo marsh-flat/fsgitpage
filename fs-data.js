@@ -108,7 +108,7 @@ export const fsData = [
         "text": "通常の医療搬送、覚醒反応、戦闘反応のどこで警戒度が上がるかを読む。",
         "check": "〈情報：軍事〉",
         "difficulty": 9,
-        "requirement": "PC2(UGN1)が参加している場合：〈情報：軍事〉または〈交渉〉 難易度7でも判定できる。",
+        "requirement": "",
         "infos": []
       },
       {
