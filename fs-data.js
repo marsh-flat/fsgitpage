@@ -135,7 +135,7 @@ export const fsData = [
     "check": "〈知覚〉",
     "difficulty": 9,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -144,7 +144,7 @@ export const fsData = [
       ]
     },
     "requiresSuccess": [],
-    "summary": "孤児院へ突入するのではなく、孤児院周辺へ安全に近づく経路を押さえる。\n正規の保護活動、裏口、物資導線、スラム経由のどれを使えるかを調べる。",
+    "summary": "孤児院周辺へ安全に近づく経路を押さえる。\n正規の保護活動、裏口、物資導線、スラム経由のどれを使えるかを調べる。",
     "milestones": [
       {
         "value": 3,
@@ -156,28 +156,10 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 6,
-        "title": "使える接近経路を絞る。",
-        "text": "正規の保護活動として近づくか、裏道を使うか、PCたちは方針を固める。",
-        "check": "〈情報：噂話〉または〈情報：GPO〉",
-        "difficulty": 9,
-        "requirement": "PC1(孤児)が参加している場合：〈情報：噂話〉 難易度7でも判定できる。",
-        "infos": []
-      },
-      {
         "value": 9,
         "title": "監視の薄いタイミングを見つける。",
         "text": "GPO過激派やFHの目が逸れる瞬間を探す。",
         "check": "〈知覚〉",
-        "difficulty": 10,
-        "requirement": "",
-        "infos": []
-      },
-      {
-        "value": 12,
-        "title": "実際に使う接近計画を決める。",
-        "text": "踏み込むのは次のウェーブだが、どこから入るかはここで決まる。",
-        "check": "〈交渉〉または〈知覚〉",
         "difficulty": 10,
         "requirement": "",
         "infos": []
@@ -197,7 +179,7 @@ export const fsData = [
     "check": "〈情報：噂話〉",
     "difficulty": 9,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -260,7 +242,7 @@ export const fsData = [
     "check": "〈知識：レネゲイド〉",
     "difficulty": 9,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -322,7 +304,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 9,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -382,7 +364,7 @@ export const fsData = [
     "check": "〈情報：GPO〉",
     "difficulty": 9,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [
