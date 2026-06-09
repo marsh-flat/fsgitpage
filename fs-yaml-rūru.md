@@ -79,11 +79,11 @@ fs:
 
 ```yaml
 requires_success:
-- A4
+- B4
 - C14
 ```
 
-- 判定は AND です。上記なら `A4` と `C14` の両方が成功している場合だけ条件達成です。
+- 判定は AND です。上記なら `B4` と `C14` の両方が成功している場合だけ条件達成です。
 - GM側 FS一覧では、条件未達のFSは表示されません。
 - GM側 FS一覧上部の「すべて表示」をONにすると、条件未達のFSも表示されます。
 - 条件つきFSは、FS名の下に前提IDがバッジ表示されます。
@@ -189,5 +189,5 @@ python3 tools/deploy_from_scenario_yaml.py
 
 - `scene` は数値ではなく文字列で書きます。例: `'201'`。
 - `target_progress` はPL側の進行カウンター表示上限です。`max_progress` より大きくしません。
-- `requires_success` には `code` ではなく `id` を書きます。例: `A-4` ではなく `A4`。
+- `requires_success` には `code` ではなく `id` を書きます。例: `B-4` ではなく `B4`。
 - OR 条件や「未成功なら発生」は、現行の `requires_success` では表現しません。必要になったら別項目として設計します。
