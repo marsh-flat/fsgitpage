@@ -24,7 +24,7 @@ export const fsData = [
         "text": "物資搬入用チューブに近い保守通路を発見。とりあえず人目は避けられる。都合良いエリアに抜けているとよいが…",
         "check": "〈知覚〉",
         "difficulty": 6,
-        "requirement": "[]",
+        "requirement": "",
         "infos": []
       },
       {
