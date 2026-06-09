@@ -12,10 +12,10 @@ export const fsData = [
     "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
-      "required": [],
-      "recommended": [
-        null
-      ]
+      "required": [
+        "PC1"
+      ],
+      "recommended": []
     },
     "requiresSuccess": [],
     "summary": "現時点で脱出するのではなく、緊急時に使える経路、協力者、隠れ場所をあらかじめ確保する。 物資搬入口、旧インフラ、スラムの荷運び路、現地協力者をつなぎ、いざという時の退避計画を作る。 PC4(UGN2)は沓木麻衣子の手引きと先行潜入の経験を使えるため相性がよい。PC4は事前調査資料あり。どの進行でも達成値+2",
