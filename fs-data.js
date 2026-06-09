@@ -56,8 +56,12 @@ export const fsData = [
     "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
-      "required": [],
-      "recommended": "-PC3はGPO職員としての人脈がある。どの進行でも達成値 +2。"
+      "required": [
+        "PC3"
+      ],
+      "recommended": [
+        "PC3はGPO職員としての人脈がある。どの進行でも達成値+2。"
+      ]
     },
     "requiresSuccess": [],
     "summary": "孤児院周辺に展開するGPO過激派を、手続き、保護記録、通信照会、現場判断の遅延によって遠ざける。 PC3(GPO)はGPO職員として相性がよい。 ただし、過激派と直接衝突するとPC3への疑念が強まる。",
