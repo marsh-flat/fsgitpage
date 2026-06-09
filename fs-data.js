@@ -12,9 +12,7 @@ export const fsData = [
     "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
-      "required": [
-        "PC1"
-      ],
+      "required": [],
       "recommended": []
     },
     "requiresSuccess": [],
