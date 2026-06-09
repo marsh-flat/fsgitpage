@@ -362,10 +362,7 @@ export const fsData = [
     "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
-      "required": [
-        "PC1",
-        "PC3"
-      ],
+      "required": [],
       "recommended": []
     },
     "requiresSuccess": [],
@@ -485,16 +482,13 @@ export const fsData = [
     "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
-      "required": [
-        "PC2",
-        "PC4"
-      ],
+      "required": [],
       "recommended": []
     },
     "requiresSuccess": [
       "B2"
     ],
-    "summary": "まだ脱出は行わない。\n孤児院内の子どもたちを、移動可能な子、医療が必要な子、動かせない子に分け、後の搬送判断に備える。",
+    "summary": "まだ脱出は行わない。 孤児院内の子どもたちを、移動可能な子、医療が必要な子、動かせない子に分け、後の搬送判断に備える。",
     "milestones": [
       {
         "value": 3,
