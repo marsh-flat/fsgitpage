@@ -343,15 +343,6 @@ export const fsData = [
         "difficulty": 10,
         "requirement": "",
         "infos": []
-      },
-      {
-        "value": 12,
-        "title": "",
-        "text": "",
-        "check": "",
-        "difficulty": null,
-        "requirement": "",
-        "infos": []
       }
     ],
     "success": "GPO穏健派の協力を得られる。次のシーで",
