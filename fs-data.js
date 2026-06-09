@@ -173,7 +173,7 @@ export const fsData = [
         "infos": [
           {
             "title": "情報1",
-            "text": "GPO過激派は、孤児院を洗脳と選別の場として利用しているとのうわさがある"
+            "text": "セラがスラム内のFH関連施設に出入りをしていたという噂を聞いた"
           }
         ]
       }
@@ -316,12 +316,7 @@ export const fsData = [
         "check": "〈交渉〉",
         "difficulty": 8,
         "requirement": "スラムでの判定。",
-        "infos": [
-          {
-            "title": "情報1",
-            "text": "セラがスラム内のFH関連施設に出入りをしていたという噂を聞いた"
-          }
-        ]
+        "infos": []
       }
     ],
     "success": "ライオットの協力の約束が得られる。",
@@ -354,7 +349,12 @@ export const fsData = [
         "check": "〈交渉〉〈情報:GPO〉",
         "difficulty": 9,
         "requirement": "",
-        "infos": []
+        "infos": [
+          {
+            "title": "情報1",
+            "text": "GPO過激派は、孤児院を洗脳と選別の場として利用しているとのうわさがある"
+          }
+        ]
       },
       {
         "value": 4,
