@@ -93,7 +93,7 @@ export const fsData = [
     "check": "〈情報：軍事〉",
     "difficulty": 9,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [],
@@ -103,7 +103,7 @@ export const fsData = [
     "summary": "ストレンジャーズがどの危険度まで黙認し、どこから封鎖維持を優先して介入するかを読む。PC2はストレンジャーズの腕章の効果でどの進行でも達成値+2",
     "milestones": [
       {
-        "value": 3,
+        "value": 2,
         "title": "封鎖線の反応基準を確認する。",
         "text": "通常の医療搬送、覚醒反応、戦闘反応のどこで警戒度が上がるかを読む。",
         "check": "〈情報：軍事〉",
@@ -112,7 +112,7 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 9,
+        "value": 4,
         "title": "急襲判断の遅延条件を掴む。",
         "text": "ストレンジャーズが即時急襲ではなく観測継続を選ぶ根拠を作る。",
         "check": "〈知識：レネゲイド〉または〈情報：軍事〉",
@@ -147,7 +147,7 @@ export const fsData = [
     "summary": "孤児院周辺へ安全に近づく経路を押さえる。\n正規の保護活動、裏口、物資導線、スラム経由のどれを使えるかを調べる。",
     "milestones": [
       {
-        "value": 3,
+        "value": 2,
         "title": "孤児院周辺の人目を読む。",
         "text": "GPO、住民、孤児院関係者の視線がどこに集まっているかを掴む。",
         "check": "〈知覚〉",
@@ -156,7 +156,7 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 9,
+        "value": 4,
         "title": "監視の薄いタイミングを見つける。",
         "text": "GPO過激派やFHの目が逸れる瞬間を探す。",
         "check": "〈知覚〉",
@@ -192,38 +192,20 @@ export const fsData = [
     "summary": "デモンズレネゲイド症の子どもたちが孤児院内のどこにいるか、どの程度動かせる状態かを把握する。\n後の救出判断に必要な情報を集める。",
     "milestones": [
       {
-        "value": 3,
-        "title": "保護対象の噂を集める。",
-        "text": "孤児院には、すでに保護対象となっているデモンズレネゲイド症の子どもたちがいる。",
-        "check": "〈情報：噂話〉",
-        "difficulty": 9,
-        "requirement": "PC1(孤児)が参加している場合：〈情報：噂話〉または〈交渉〉 難易度7でも判定できる。",
-        "infos": []
-      },
-      {
-        "value": 6,
-        "title": "医療搬送が必要な子を見極める。",
-        "text": "歩ける子、支えが必要な子、動かせない子の見当をつける。",
-        "check": "〈知識：医療〉",
-        "difficulty": 9,
-        "requirement": "支援系エフェクトを使う場合：容体安定、痛みの軽減、不安の緩和を演出できる。",
-        "infos": []
-      },
-      {
-        "value": 9,
+        "value": 2,
         "title": "子どもたちの居場所を絞る。",
         "text": "生活棟、医務室、食堂、礼拝堂周辺のどこにいるかを押さえる。",
         "check": "〈知覚〉または〈情報：噂話〉",
-        "difficulty": 10,
+        "difficulty": 2,
         "requirement": "",
         "infos": []
       },
       {
-        "value": 12,
+        "value": 4,
         "title": "避難準備の優先順位を作る。",
         "text": "全員を同時に動かせるとは限らない。誰から動かすかを決める。",
         "check": "〈意志〉または〈知識：医療〉",
-        "difficulty": 10,
+        "difficulty": 4,
         "requirement": "",
         "infos": []
       }
@@ -251,10 +233,10 @@ export const fsData = [
       "recommended": []
     },
     "requiresSuccess": [],
-    "summary": "礼拝堂事故、ステンドグラス、PC1(孤児)の転移、セラの異常をつなげて調べる。\nセラを傷つけずに助けるため、異常反応の性質を見極める。",
+    "summary": "礼拝堂事故、ステンドグラス、PC1(孤児)の転移、セラの異常をつなげて調べる。 セラを傷つけずに助けるため、異常反応の性質を見極める。",
     "milestones": [
       {
-        "value": 3,
+        "value": 2,
         "title": "PC1(孤児)の記憶を整理する。",
         "text": "声、光、ステンドグラス、セラの様子を断片的に辿る。",
         "check": "〈意志〉または〈知覚〉",
@@ -263,31 +245,18 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 6,
+        "value": 4,
         "title": "礼拝堂周辺の証言を拾う。",
         "text": "夜に光が漏れたこと、セラがステンドグラスを見たがっていたことが繋がる。",
-        "check": "〈情報：噂話〉",
+        "check": "〈情報：噂話〉知識：レネゲイド〉",
         "difficulty": 9,
         "requirement": "",
-        "infos": []
-      },
-      {
-        "value": 9,
-        "title": "異常反応の性質を推測する。",
-        "text": "これは単なる覚醒反応ではなく、アズラエルとセラの接触が不安定に表れたものだと分かる。",
-        "check": "〈知識：レネゲイド〉",
-        "difficulty": 10,
-        "requirement": "",
-        "infos": []
-      },
-      {
-        "value": 12,
-        "title": "対決時に見るべき点を定める。",
-        "text": "セラを傷つけずに分離するには、融合体の力だけでなく反応の拡散も抑える必要がある。",
-        "check": "〈知識：レネゲイド〉または〈意志〉",
-        "difficulty": 10,
-        "requirement": "",
-        "infos": []
+        "infos": [
+          {
+            "title": "情報1",
+            "text": "これは単なる覚醒反応ではなく、セラの接触が不安定に表れたものだと分かる。"
+          }
+        ]
       }
     ],
     "success": "セラ分離と異常反応への対応に必要な材料を得る。",
@@ -314,16 +283,7 @@ export const fsData = [
     "summary": "ライオットへ陽動協力を頼む。\nPC1(孤児)はライオットと相性がよい。\nただし、ライオットを動かすほどGPOとの関係が悪化するリスクがある。",
     "milestones": [
       {
-        "value": 3,
-        "title": "連絡役を見つける。",
-        "text": "スラムの裏路地で、ライオットに近い住民や若者を見つける。",
-        "check": "〈情報：噂話〉",
-        "difficulty": 9,
-        "requirement": "PC1(孤児)が参加している場合：〈情報：噂話〉または〈交渉〉 難易度7でも判定できる。",
-        "infos": []
-      },
-      {
-        "value": 6,
+        "value": 2,
         "title": "目的を伝える。",
         "text": "暴動ではなく、救助のための陽動であると伝える。",
         "check": "〈交渉〉",
@@ -332,16 +292,7 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 9,
-        "title": "陽動の範囲を決める。",
-        "text": "過激化しすぎれば、GPOが暴徒鎮圧を名目に動く。",
-        "check": "〈意志〉または〈交渉〉",
-        "difficulty": 10,
-        "requirement": "",
-        "infos": []
-      },
-      {
-        "value": 12,
+        "value": 4,
         "title": "合図と退き際を決める。",
         "text": "ライオット側にも被害を出さないため、陽動の終わり方を共有する。",
         "check": "〈交渉〉",
@@ -376,16 +327,7 @@ export const fsData = [
     "summary": "蓮見咲を通じ、GPO穏健派に過激派の命令系統を乱すための後方支援を頼む。\nPC3(GPO)はGPO穏健派と相性がよい。\n失敗すると過激派の抵抗が激しくなるリスクがある。",
     "milestones": [
       {
-        "value": 3,
-        "title": "蓮見咲との通信線を確保する。",
-        "text": "過激派に傍受されないよう、最低限の連絡を通す。",
-        "check": "〈情報：GPO〉",
-        "difficulty": 9,
-        "requirement": "PC3(GPO)が参加している場合：〈情報：GPO〉または〈交渉〉 難易度7でも判定できる。",
-        "infos": []
-      },
-      {
-        "value": 6,
+        "value": 4,
         "title": "協力可能な穏健派を探す。",
         "text": "現場に出られなくても、記録照合や命令再審査で時間を稼げる者を探す。",
         "check": "〈交渉〉",
@@ -394,7 +336,7 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 9,
+        "value": 4,
         "title": "過激派の動きを遅らせる理由を作る。",
         "text": "保護責任者確認、医療判定、本人確認、記録照合を理由に即時行動を止める。",
         "check": "〈知識：法律〉または〈情報：GPO〉",
@@ -404,10 +346,10 @@ export const fsData = [
       },
       {
         "value": 12,
-        "title": "穏健派の退き際を決める。",
-        "text": "支援者を過激派に潰されないよう、協力の痕跡を薄くする。",
-        "check": "〈交渉〉",
-        "difficulty": 10,
+        "title": "",
+        "text": "",
+        "check": "",
+        "difficulty": null,
         "requirement": "",
         "infos": []
       }
