@@ -56,9 +56,7 @@ export const fsData = [
     "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
-      "required": [
-        null
-      ],
+      "required": [],
       "recommended": [
         "PC3はGPO職員としての人脈がある。どの進行でも達成値+2。"
       ]
