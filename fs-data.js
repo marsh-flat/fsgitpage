@@ -360,13 +360,13 @@ export const fsData = [
     "difficulty": 10,
     "maxProgress": 30,
     "targetProgress": 6,
-    "exp": 4,
+    "exp": 5,
     "pcParticipation": {
       "required": [],
       "recommended": []
     },
     "requiresSuccess": [],
-    "summary": "GPO過激派を遠ざけきれなかった場合、孤児院周辺には検問と現場部隊が残っている。\nPCたちは医療搬送の名目、GPO手続き、実力行使を組み合わせて、孤児院内部への入口を開く。\nこのFSでは、孤児を実際に救出する前に、孤児院へ踏み込むための突破口を作る。",
+    "summary": "GPO過激派を遠ざけきれなかった場合、孤児院周辺には検問と現場部隊が残っている。 PCたちは医療搬送の名目、GPO手続き、実力行使を組み合わせて、孤児院内部への入口を開く。 このFSでは、孤児を実際に救出する前に、孤児院へ踏み込むための突破口を作る。GPO穏健派が共闘している場合は判定+3 ライオットが共闘している場合は判定+1",
     "milestones": [
       {
         "value": 3,
@@ -388,20 +388,11 @@ export const fsData = [
       },
       {
         "value": 9,
-        "title": "入口を押し開く。",
+        "title": "入口を押し開き孤児院内部へ突入する。",
         "text": "正門は危険だが、搬入口、礼拝堂脇、裏庭のどれかに隙が生じる。",
         "check": "【肉体】または〈交渉〉",
         "difficulty": 11,
         "requirement": "PC3(GPO)：承認コードの確認待ちを理由にする【社会】 難易度9でも判定できる。\nPC2(UGN1)が参加している場合：危険度報告込みの〈交渉〉 難易度9でも判定できる。",
-        "infos": []
-      },
-      {
-        "value": 12,
-        "title": "孤児院内部へ突入する。",
-        "text": "ただしGPO過激派との衝突は記録に残り、後続のウェーブで過激派やFHの動きが早まる。",
-        "check": "",
-        "difficulty": null,
-        "requirement": "PCたちは孤児院内部へ踏み込む。",
         "infos": []
       }
     ],
@@ -420,13 +411,13 @@ export const fsData = [
     "difficulty": 10,
     "maxProgress": 30,
     "targetProgress": 6,
-    "exp": 4,
+    "exp": 5,
     "pcParticipation": {
       "required": [],
       "recommended": []
     },
     "requiresSuccess": [],
-    "summary": "GPOの圧力が崩れた瞬間、またはPCたちが救出を諦めて離脱へ傾いた瞬間、FHが動く。\nFHは孤児院の子ども、PC1(孤児)、アズラエルのいずれかを奪うため、火事場に割り込んでくる。\nこのFSでは、FHの初撃をしのぎ、次のウェーブへ進むための態勢を立て直す。",
+    "summary": "GPOの圧力が崩れた瞬間、またはPCたちが救出を諦めて離脱へ傾いた瞬間、FHが動く。 FHは孤児院の子ども、PC1(孤児)、アズラエルのいずれかを奪うため、火事場に割り込んでくる。 このFSでは、FHの初撃をしのぎ、次のウェーブへ進むための態勢を立て直す。GPO穏健派が共闘している場合は判定+1 ライオットが共闘している場合は判定+3",
     "milestones": [
       {
         "value": 3,
@@ -474,13 +465,13 @@ export const fsData = [
     "scene": "401",
     "sceneName": "401_第一ウェーブ_突入",
     "code": "C1-3",
-    "title": "子どもたちの避難準備を始める",
+    "title": "子どもたちの安全を確保する",
     "end": "4R経過",
     "check": "〈知識：医療〉",
     "difficulty": 9,
     "maxProgress": 30,
     "targetProgress": 12,
-    "exp": 4,
+    "exp": 5,
     "pcParticipation": {
       "required": [],
       "recommended": []
@@ -506,15 +497,6 @@ export const fsData = [
         "check": "〈知識：医療〉",
         "difficulty": 9,
         "requirement": "支援系エフェクトを使う場合：容体安定、不安の緩和、応急処置を演出できる。",
-        "infos": []
-      },
-      {
-        "value": 9,
-        "title": "避難順を決める。",
-        "text": "全員を同時に運べない。誰から動かすかを決める。",
-        "check": "〈意志〉または〈知識：医療〉",
-        "difficulty": 10,
-        "requirement": "",
         "infos": []
       },
       {
