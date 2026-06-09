@@ -32,9 +32,9 @@ export const fsData = [
       {
         "value": 4,
         "title": "スラム街の協力者を得よ。",
-        "text": "スラム街に抜けた協力者達が見つけスラム街の子どもの救出に協力してくれ説得する。",
+        "text": "スラム街に抜けた。協力者達が見つけスラム街の子どもの救出に協力してくれと説得する。",
         "check": "〈交渉〉",
-        "difficulty": 9,
+        "difficulty": 10,
         "requirement": "スラムでの判定。",
         "infos": []
       }
@@ -53,7 +53,7 @@ export const fsData = [
     "check": "〈交渉〉",
     "difficulty": 8,
     "maxProgress": 30,
-    "targetProgress": 12,
+    "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
       "required": [
@@ -67,7 +67,7 @@ export const fsData = [
     "summary": "孤児院周辺に展開するGPO過激派を、手続き、保護記録、通信照会、現場判断の遅延によって遠ざける。 PC3(GPO)はGPO職員として相性がよい。 ただし、過激派と直接衝突するとPC3への疑念が強まる。",
     "milestones": [
       {
-        "value": 3,
+        "value": 2,
         "title": "孤児院周辺の命令系統を洗う。",
         "text": "過激派の隊員は、表向きには確認任務として孤児院に集まっている。",
         "check": "〈情報：GPO〉",
@@ -76,29 +76,11 @@ export const fsData = [
         "infos": []
       },
       {
-        "value": 6,
-        "title": "蓮見咲の通信を通す。",
-        "text": "穏健派側の照会を現場回線へ差し込み、即時突入の根拠を揺らす。",
-        "check": "〈交渉〉",
-        "difficulty": 9,
-        "requirement": "支援系エフェクトを使う場合：通信保護、記録照合、医療判定の補助を演出できる。",
-        "infos": []
-      },
-      {
         "value": 9,
         "title": "保護記録の確認を要求する。",
         "text": "レネゲイド症児童の医療搬送案件として、現場判断だけで処理できない状態にする。",
-        "check": "〈知識：法律〉または〈情報：GPO〉",
-        "difficulty": 10,
-        "requirement": "",
-        "infos": []
-      },
-      {
-        "value": 12,
-        "title": "過激派の即時行動を止める。",
-        "text": "過激派は引き下がるが、完全に諦めたわけではない。",
-        "check": "〈交渉〉",
-        "difficulty": 10,
+        "check": "〈知識：医療〉または〈情報：GPO〉",
+        "difficulty": 4,
         "requirement": "",
         "infos": []
       }
