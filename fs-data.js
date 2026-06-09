@@ -67,7 +67,12 @@ export const fsData = [
         "check": "〈情報：GPO〉〈交渉〉",
         "difficulty": 9,
         "requirement": "[]",
-        "infos": []
+        "infos": [
+          {
+            "title": "情報1",
+            "text": "GPO過激派の隊員の話によると、最近孤児院周辺にFHの影があり警戒が高まっているとのこと"
+          }
+        ]
       },
       {
         "value": 9,
@@ -165,7 +170,12 @@ export const fsData = [
         "check": "〈RC〉",
         "difficulty": 8,
         "requirement": "スラムでの判定。",
-        "infos": []
+        "infos": [
+          {
+            "title": "情報1",
+            "text": "GPO過激派は、孤児院を洗脳と選別の場として利用しているとのうわさがある"
+          }
+        ]
       }
     ],
     "success": "強行突入が発生する場合も、初動の不利を抑えられる。",
@@ -210,7 +220,7 @@ export const fsData = [
         "infos": [
           {
             "title": "情報1",
-            "text": "孤児院でセラが行方不明になっていると騒ぎになっているらしい"
+            "text": "孤児院でセラが行方不明になっていると騒ぎになっているらしい。"
           }
         ]
       }
@@ -306,7 +316,12 @@ export const fsData = [
         "check": "〈交渉〉",
         "difficulty": 8,
         "requirement": "スラムでの判定。",
-        "infos": []
+        "infos": [
+          {
+            "title": "情報1",
+            "text": "セラがスラム内のFH関連施設に出入りをしていたという噂を聞いた"
+          }
+        ]
       }
     ],
     "success": "ライオットの協力の約束が得られる。",
