@@ -56,9 +56,7 @@ export const fsData = [
     "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
-      "required": [
-        "PC3"
-      ],
+      "required": [],
       "recommended": []
     },
     "requiresSuccess": [],
@@ -101,9 +99,7 @@ export const fsData = [
     "exp": 4,
     "pcParticipation": {
       "required": [],
-      "recommended": [
-        "PC2"
-      ]
+      "recommended": []
     },
     "requiresSuccess": [],
     "summary": "ストレンジャーズがどの危険度まで黙認し、どこから封鎖維持を優先して介入するかを読む。\nPC2(UGN1)はストレンジャーズの客である腕章、逐次報告回線、危険度観測ログを使えるため相性がよい。",
