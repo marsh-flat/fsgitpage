@@ -370,7 +370,7 @@ export const fsData = [
         "text": "GPO過激派は「児童保護施設の再審査」を名目に、正門と裏手を押さえている。",
         "check": "〈交渉〉",
         "difficulty": 10,
-        "requirement": "PC3(GPO)：〈情報：GPO〉または【社会】 難易度8でも判定できる。\nPC2(UGN1)が参加している場合：ホワイトハンドの医療搬送記録を使う〈交渉〉 難易度9でも判定できる。",
+        "requirement": "",
         "infos": []
       },
       {
@@ -379,7 +379,7 @@ export const fsData = [
         "text": "過激派の一部が強硬手段に移る。警告弾、封鎖用ドローン、簡易バリケードが孤児院への接近を阻む。",
         "check": "【肉体】または〈回避〉",
         "difficulty": 12,
-        "requirement": "PC1(孤児)が参加している場合：スラムの抜け道を使う〈知覚〉 難易度9でも判定できる。",
+        "requirement": "",
         "infos": []
       },
       {
@@ -388,7 +388,7 @@ export const fsData = [
         "text": "正門は危険だが、搬入口、礼拝堂脇、裏庭のどれかに隙が生じる。",
         "check": "【肉体】または〈交渉〉",
         "difficulty": 11,
-        "requirement": "PC3(GPO)：承認コードの確認待ちを理由にする【社会】 難易度9でも判定できる。\nPC2(UGN1)が参加している場合：危険度報告込みの〈交渉〉 難易度9でも判定できる。",
+        "requirement": "",
         "infos": []
       }
     ],
