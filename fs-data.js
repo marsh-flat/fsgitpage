@@ -139,9 +139,7 @@ export const fsData = [
     "exp": 4,
     "pcParticipation": {
       "required": [],
-      "recommended": [
-        []
-      ]
+      "recommended": []
     },
     "requiresSuccess": [],
     "summary": "孤児院周辺へ安全に近づく経路を押さえる。 正規の保護活動、裏口、物資導線、スラム経由のどれを使えるかを調べる。",
@@ -183,17 +181,14 @@ export const fsData = [
     "exp": 4,
     "pcParticipation": {
       "required": [],
-      "recommended": [
-        "PC2",
-        "PC4"
-      ]
+      "recommended": []
     },
     "requiresSuccess": [],
     "summary": "デモンズレネゲイド症の子どもたちが孤児院内のどこにいるか、どの程度動かせる状態かを把握する。 後の救出判断に必要な情報を集める。",
     "milestones": [
       {
         "value": 2,
-        "title": "PC1(孤児)の記憶を整理する。",
+        "title": "PC1の記憶を整理する。",
         "text": "当時の状況を思い出す。",
         "check": "〈感覚〉 または〈知識：医療〉",
         "difficulty": 9,
@@ -227,34 +222,37 @@ export const fsData = [
     "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
-      "required": [
-        "PC1"
-      ],
+      "required": [],
       "recommended": []
     },
     "requiresSuccess": [],
-    "summary": "礼拝堂事故、ステンドグラス、PC1(孤児)の転移、セラの異常をつなげて調べる。 セラを傷つけずに助けるため、異常反応の性質を見極める。",
+    "summary": "礼拝堂事故、ステンドグラス、PC1の転移、セラの異常をつなげて調べる。 セラを助けるため、異常反応の性質を見極める。",
     "milestones": [
       {
         "value": 2,
-        "title": "PC1(孤児)の記憶を整理する。",
-        "text": "声、光、ステンドグラス、セラの様子を断片的に辿る。",
+        "title": "PC1の記憶を整理する。",
+        "text": "声、光、ステンドグラス、セラの様子の記憶を断片的に辿る。",
         "check": "〈意志〉または〈知覚〉",
         "difficulty": 9,
-        "requirement": "PC1(孤児)が参加している場合：〈意志〉または〈知覚〉 難易度7でも判定できる。",
-        "infos": []
+        "requirement": "PC1は参加必須",
+        "infos": [
+          {
+            "title": "情報1",
+            "text": "セラもステンドグラスに衝突していた記憶がよみがえる。"
+          }
+        ]
       },
       {
         "value": 4,
-        "title": "礼拝堂周辺の証言を拾う。",
-        "text": "夜に光が漏れたこと、セラがステンドグラスを見たがっていたことが繋がる。",
-        "check": "〈情報：噂話〉知識：レネゲイド〉",
-        "difficulty": 9,
+        "title": "PC1の記憶をさらに整理する。",
+        "text": "あの時いったい何が…。",
+        "check": "〈感覚〉〈知識：レネゲイド〉",
+        "difficulty": 12,
         "requirement": "",
         "infos": [
           {
             "title": "情報1",
-            "text": "これは単なる覚醒反応ではなく、セラの接触が不安定に表れたものだと分かる。"
+            "text": "衝突というよりぶつかり合い混ざり合い一体化していたような…セラがステンドグラスの女神像と…"
           }
         ]
       }
@@ -318,9 +316,7 @@ export const fsData = [
     "targetProgress": 6,
     "exp": 4,
     "pcParticipation": {
-      "required": [
-        "PC3"
-      ],
+      "required": [],
       "recommended": []
     },
     "requiresSuccess": [],
