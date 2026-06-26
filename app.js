@@ -163,7 +163,8 @@ function renderNav() {
         requiresSuccess.length ? "locked-rule" : ""
       ].filter(Boolean).join(" ");
       item.innerHTML = `
-        <input type="checkbox" value="${fs.id}" ${activeIds.includes(fs.id) ? "checked" : ""}>
+        <input class="nav-check-input" type="checkbox" value="${fs.id}" ${activeIds.includes(fs.id) ? "checked" : ""}>
+        <span class="nav-check-box" aria-hidden="true"></span>
         <span class="nav-code">${fs.code}</span>
         <span class="nav-title-wrap">
           <span class="nav-title">${escapeHtml(fs.title)}</span>

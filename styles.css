@@ -290,10 +290,34 @@ body[data-mode="player"] #fs-detail {
   box-shadow: inset 4px 0 0 var(--accent);
 }
 
-.nav-item input[type="checkbox"] {
+.nav-check-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-check-box {
   width: 16px;
   height: 16px;
-  accent-color: var(--accent);
+  display: inline-grid;
+  place-items: center;
+  border: 1.5px solid #6b7280;
+  border-radius: 3px;
+  background: #fff;
+}
+
+.nav-check-input:checked + .nav-check-box {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.nav-check-input:checked + .nav-check-box::after {
+  content: "";
+  width: 8px;
+  height: 5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translate(1px, -1px);
 }
 
 .nav-code {
