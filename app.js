@@ -231,6 +231,9 @@ function renderFsCard(fs) {
               <td>${targetProgress}</td>
             </tr>
   ` : "";
+  const basicInfoHtml = mode === "player"
+    ? renderPlayerBasicInfo(fs, progress, targetProgress, maxProgress, pcParticipation)
+    : renderGmBasicInfo(fs, progress, targetProgress, maxProgress, pcParticipation, gmOnlyRuleRow);
 
   if (mode === "player" && !current.visible) {
     return `<p class="hidden-note">このFSはまだGMから開示されていません。</p>`;
@@ -294,37 +297,7 @@ function renderFsCard(fs) {
       </div>
 
       <section class="basic-info">
-        <table class="fs-sheet">
-          <tbody>
-            <tr>
-              <th>名称</th>
-              <td colspan="3">${escapeHtml(fs.title)}</td>
-              <th>終了条件</th>
-              <td>${escapeHtml(fs.end)}</td>
-            </tr>
-            <tr>
-              <th>判定</th>
-              <td>${escapeHtml(fs.check || "任意")}</td>
-              <th>難易度</th>
-              <td>${escapeHtml(fs.difficulty || "-")}</td>
-              <th>最大達成値</th>
-              <td>${maxProgress}</td>
-            </tr>
-            ${gmOnlyRuleRow}
-            <tr>
-              <th>条件</th>
-              <td colspan="5">${escapeHtml(pcParticipation)}</td>
-            </tr>
-            <tr>
-              <th>進行カウンター</th>
-              <td colspan="5">${renderProgressCounter(progress, targetProgress)}</td>
-            </tr>
-            <tr>
-              <th>概要</th>
-              <td colspan="5">${escapeHtml(fs.summary)}</td>
-            </tr>
-          </tbody>
-        </table>
+        ${basicInfoHtml}
       </section>
 
       <div class="fs-scroll-body">
@@ -339,6 +312,81 @@ function renderFsCard(fs) {
         </div>
       </div>
     </article>
+  `;
+}
+
+function renderGmBasicInfo(fs, progress, targetProgress, maxProgress, pcParticipation, gmOnlyRuleRow) {
+  return `
+    <table class="fs-sheet">
+      <tbody>
+        <tr>
+          <th>名称</th>
+          <td colspan="3">${escapeHtml(fs.title)}</td>
+          <th>終了条件</th>
+          <td>${escapeHtml(fs.end)}</td>
+        </tr>
+        <tr>
+          <th>判定</th>
+          <td>${escapeHtml(fs.check || "任意")}</td>
+          <th>難易度</th>
+          <td>${escapeHtml(fs.difficulty || "-")}</td>
+          <th>最大達成値</th>
+          <td>${maxProgress}</td>
+        </tr>
+        ${gmOnlyRuleRow}
+        <tr>
+          <th>条件</th>
+          <td colspan="5">${escapeHtml(pcParticipation)}</td>
+        </tr>
+        <tr>
+          <th>進行カウンター</th>
+          <td colspan="5">${renderProgressCounter(progress, targetProgress)}</td>
+        </tr>
+        <tr>
+          <th>概要</th>
+          <td colspan="5">${escapeHtml(fs.summary)}</td>
+        </tr>
+      </tbody>
+    </table>
+  `;
+}
+
+function renderPlayerBasicInfo(fs, progress, targetProgress, maxProgress, pcParticipation) {
+  return `
+    <div class="player-info-grid">
+      <div class="player-info-item player-info-wide">
+        <span>名称</span>
+        <strong>${escapeHtml(fs.title)}</strong>
+      </div>
+      <div class="player-info-item">
+        <span>終了条件</span>
+        <strong>${escapeHtml(fs.end)}</strong>
+      </div>
+      <div class="player-info-item player-info-wide">
+        <span>判定</span>
+        <strong>${escapeHtml(fs.check || "任意")}</strong>
+      </div>
+      <div class="player-info-item">
+        <span>難易度</span>
+        <strong>${escapeHtml(fs.difficulty || "-")}</strong>
+      </div>
+      <div class="player-info-item">
+        <span>最大達成値</span>
+        <strong>${maxProgress}</strong>
+      </div>
+      <div class="player-info-item player-info-wide">
+        <span>条件</span>
+        <strong>${escapeHtml(pcParticipation)}</strong>
+      </div>
+      <div class="player-info-item player-info-wide">
+        <span>進行カウンター</span>
+        ${renderProgressCounter(progress, targetProgress)}
+      </div>
+      <div class="player-info-item player-info-full">
+        <span>概要</span>
+        <p>${escapeHtml(fs.summary)}</p>
+      </div>
+    </div>
   `;
 }
 
