@@ -390,7 +390,18 @@ body[data-mode="player"] .fs-card {
 
 body[data-mode="player"] #fs-detail.multi-fs .fs-card {
   height: auto;
-  min-height: min(720px, 96dvh);
+  min-height: 0;
+  grid-template-rows: auto auto;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+body[data-mode="player"] #fs-detail.multi-fs .fs-scroll-body {
+  overflow: visible;
+}
+
+body[data-mode="player"] #fs-detail.multi-fs .milestones {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 body[data-mode="player"] .fs-head {
