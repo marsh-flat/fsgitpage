@@ -42,6 +42,9 @@ def main() -> int:
     parser.add_argument("--message", default="Sync FS data from scenario YAML", help="Git commit message.")
     parser.add_argument("--cache-version", default="", help="Cache-busting version for app.js and fs-data.js imports.")
     parser.add_argument("--dry-run", action="store_true", help="Generate and validate without committing or pushing.")
+    parser.add_argument("--pages-checks", type=int, default=int(os.environ.get("PAGES_CHECKS", "20")), help="Maximum GitHub Pages publish checks.")
+    parser.add_argument("--pages-interval", type=float, default=float(os.environ.get("PAGES_INTERVAL", "2")), help="Seconds between GitHub Pages publish checks.")
+    parser.add_argument("--skip-pages-verify", action="store_true", help="Skip GitHub Pages publish verification after push.")
     args = parser.parse_args()
 
     if yaml is None:
@@ -87,8 +90,12 @@ def main() -> int:
     run(["git", "commit", "-m", args.message], cwd=ROOT)
     run(["git", "push"], cwd=ROOT)
 
+    if args.skip_pages_verify:
+        print("skipped GitHub Pages verification")
+        return 0
+
     commit = run_capture(["git", "rev-parse", "HEAD"], cwd=ROOT).strip()
-    wait_for_pages(commit, args.cache_version)
+    wait_for_pages(commit, args.cache_version, args.pages_checks, args.pages_interval)
     verify_public_url(args.cache_version)
     print("done")
     return 0
@@ -256,16 +263,18 @@ def apply_cache_version(version: str) -> None:
     print(f"cache version: {version}")
 
 
-def wait_for_pages(commit: str, cache_version: str = "") -> None:
+def wait_for_pages(commit: str, cache_version: str = "", attempts: int = 20, interval: float = 2) -> None:
     print("waiting for GitHub Pages...")
     token = commit[:12]
-    for attempt in range(1, 31):
+    attempts = max(1, attempts)
+    interval = max(0.5, interval)
+    for attempt in range(1, attempts + 1):
         try:
             html = fetch_text(f"{PUBLIC_ROOT}/gm.html?deploy-check={token}-{attempt}")
             app = fetch_text(f"{PUBLIC_ROOT}/app.js?deploy-check={token}-{attempt}")
         except Exception as error:
-            print(f"Pages check {attempt}/30: failed: {error}")
-            time.sleep(5)
+            print(f"Pages check {attempt}/{attempts}: failed: {error}")
+            time.sleep(interval)
             continue
 
         if cache_version:
@@ -275,14 +284,37 @@ def wait_for_pages(commit: str, cache_version: str = "") -> None:
             html_ok = "<!doctype html>" in html.lower()
             app_ok = "import { fsData }" in app
 
-        print(f"Pages check {attempt}/30: html={'ok' if html_ok else 'old'} app={'ok' if app_ok else 'old'}")
+        build = pages_build_for_commit(commit)
+        build_note = f" build={build['status']}" if build else ""
+        print(f"Pages check {attempt}/{attempts}: html={'ok' if html_ok else 'old'} app={'ok' if app_ok else 'old'}{build_note}")
         if html_ok and app_ok:
             return
+        if build and build["status"] == "errored":
+            fail(f"GitHub Pages build failed for {token}: {build.get('error') or 'unknown error'}")
 
-        time.sleep(5)
+        time.sleep(interval)
 
     pages = run_capture(["gh", "api", "repos/marsh-flat/fsgitpage/pages", "--jq", ".status"], cwd=ROOT, timeout=8).strip()
     fail(f"GitHub Pages did not publish the expected cache version. status={pages}")
+
+
+def pages_build_for_commit(commit: str) -> dict | None:
+    try:
+        text = run_capture([
+            "gh",
+            "api",
+            "repos/marsh-flat/fsgitpage/pages/builds",
+            "--jq",
+            f'.[] | select(.commit == "{commit}") | {{status, error: .error.message}}',
+        ], cwd=ROOT, timeout=8)
+    except Exception:
+        return None
+    if not text:
+        return None
+    try:
+        return json.loads(text.splitlines()[0])
+    except json.JSONDecodeError:
+        return None
 
 
 def verify_public_url(cache_version: str = "") -> None:

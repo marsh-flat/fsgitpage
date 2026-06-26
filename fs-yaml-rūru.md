@@ -204,6 +204,8 @@ python3 tools/deploy_from_scenario_yaml.py
 
 `--dry-run` は `fs-data.js` が変わるかと `app.js` の構文を確認します。
 通常実行は `fs-data.js` を生成し、対象ファイルをコミット、push、GitHub Pages の公開確認まで行います。
+Pages確認は既定で最大20回、2秒間隔です。調整する場合は `--pages-checks 10 --pages-interval 1` または環境変数 `PAGES_CHECKS=10 PAGES_INTERVAL=1` を使います。
+急いでpushだけ済ませたい場合は `--skip-pages-verify` を付けます。この場合、公開確認は別途行ってください。
 
 ## 注意
 
