@@ -154,6 +154,7 @@ def normalize_milestone(item: dict) -> dict:
     item.setdefault("value", 0)
     item.setdefault("title", "")
     item.setdefault("text", "")
+    item.setdefault("mastertxt", "")
     item.setdefault("check", "")
     item.setdefault("difficulty", None)
     item.setdefault("requirement", "")
@@ -214,6 +215,7 @@ def render_js(records: list[dict]) -> str:
                     "value": item.get("value"),
                     "title": str(item.get("title", "")),
                     "text": str(item.get("text", "")),
+                    "mastertxt": str(item.get("mastertxt", "")),
                     "check": str(item.get("check", "")),
                     "difficulty": item.get("difficulty"),
                     "requirement": str(item.get("requirement", "")),
@@ -238,16 +240,16 @@ def apply_cache_version(version: str) -> None:
 
     app_path = ROOT / "app.js"
     app_text = app_path.read_text(encoding="utf-8")
-    app_next = re.sub(r'"\./fs-data\.js(?:\?v=[^"]+)?"', f'"./fs-data.js?v={version}"', app_text, count=1)
-    if app_next == app_text:
+    app_next, app_count = re.subn(r'"\./fs-data\.js(?:\?v=[^"]+)?"', f'"./fs-data.js?v={version}"', app_text, count=1)
+    if app_count != 1:
         fail("Could not update fs-data.js import in app.js")
     app_path.write_text(app_next, encoding="utf-8")
 
     for name in ("gm.html", "player.html"):
         path = ROOT / name
         text = path.read_text(encoding="utf-8")
-        next_text = re.sub(r'"\./app\.js(?:\?v=[^"]+)?"', f'"./app.js?v={version}"', text, count=1)
-        if next_text == text:
+        next_text, count = re.subn(r'"\./app\.js(?:\?v=[^"]+)?"', f'"./app.js?v={version}"', text, count=1)
+        if count != 1:
             fail(f"Could not update app.js script URL in {name}")
         path.write_text(next_text, encoding="utf-8")
 

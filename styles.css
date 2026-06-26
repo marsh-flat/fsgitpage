@@ -698,6 +698,27 @@ body[data-mode="player"] .fs-scroll-body h3 {
   font-size: 13px;
 }
 
+.master-note {
+  margin-top: 9px;
+  padding: 8px;
+  border: 1px solid rgba(17, 24, 39, 0.18);
+  border-radius: 7px;
+  background: #f8fafc;
+}
+
+.master-note span {
+  display: block;
+  margin-bottom: 4px;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.master-note p {
+  margin: 0;
+  color: #111827;
+}
+
 .info-list {
   display: grid;
   gap: 6px;

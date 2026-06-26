@@ -1,5 +1,5 @@
 import { firebaseConfig } from "./firebase-config.js";
-import { fsData } from "./fs-data.js?v=fs-9dfe8ba06849";
+import { fsData } from "./fs-data.js?v=20260626-mastertxt";
 import { happeningChart } from "./happening-data.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
@@ -298,6 +298,12 @@ function renderFsCard(fs) {
     const check = formatCheck(milestone.check || fs.check, milestone.difficulty || fs.difficulty);
     const requirement = milestone.requirement || "指定なし";
     const infoHtml = renderMilestoneInfos(fs.id, key, milestone, current);
+    const masterTextHtml = mode === "gm" && milestone.mastertxt ? `
+        <div class="master-note">
+          <span>演出メモ</span>
+          <p>${escapeHtml(milestone.mastertxt)}</p>
+        </div>
+    ` : "";
     return `
       <div class="milestone ${visible ? "visible" : ""}">
         <div class="milestone-head">
@@ -315,6 +321,7 @@ function renderFsCard(fs) {
             <dd>${escapeHtml(requirement)}</dd>
           </div>
         </dl>
+        ${masterTextHtml}
         ${infoHtml}
       </div>
     `;
