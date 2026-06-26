@@ -240,6 +240,11 @@ body[data-mode="player"] #fs-detail.multi-fs {
   display: none;
 }
 
+body[data-mode="gm"] #happening-panel {
+  padding: 10px 10px 0;
+  background: var(--panel);
+}
+
 body[data-mode="player"] #happening-panel {
   position: sticky;
   top: 0;
