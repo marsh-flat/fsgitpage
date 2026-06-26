@@ -135,15 +135,37 @@ function render() {
 function renderHappening() {
   if (!elements.happening) return;
   const happening = happeningState(state.happening);
+  const damage = damageState(state.damage);
   const item = happening.roll ? findHappening(happening.roll) : null;
-  if (mode === "player" && !happening.visible) {
+  if (mode === "player" && !happening.visible && !damage.visible) {
     elements.happening.innerHTML = "";
     elements.happening.hidden = true;
     return;
   }
 
-  elements.happening.hidden = false;
-  elements.happening.innerHTML = `
+  const damagePercent = Math.round((damage.value / damage.max) * 100);
+  const damageGaugeHtml = mode === "gm" || damage.visible ? `
+    <section class="damage-card">
+      <div class="damage-main">
+        <div class="damage-title">被害ゲージ</div>
+        <div class="damage-meter" style="--damage-percent: ${damagePercent}%;" aria-label="被害 ${damage.value} / ${damage.max}">
+          <div class="damage-meter-fill"></div>
+        </div>
+        <div class="damage-value"><strong>${damage.value}</strong><span>/ ${damage.max}</span></div>
+      </div>
+      ${mode === "gm" ? `
+        <div class="happening-controls damage-controls">
+          <label>
+            現在値
+            <input class="damage-input" type="number" min="0" max="${damage.max}" step="1" value="${damage.value}" data-damage-action="value">
+          </label>
+          <label><input type="checkbox" data-damage-action="visible" ${damage.visible ? "checked" : ""}> 表示</label>
+        </div>
+      ` : ""}
+    </section>
+  ` : "";
+
+  const happeningHtml = mode === "gm" || happening.visible ? `
     <section class="happening-card ${happeningRolling ? "rolling" : ""}">
       <div class="happening-main">
         <div class="happening-title">ハプニングチャート</div>
@@ -164,11 +186,17 @@ function renderHappening() {
         ` : ""}
       </div>
     </section>
-  `;
+  ` : "";
+
+  elements.happening.hidden = false;
+  elements.happening.innerHTML = `<div class="top-status-panel">${happeningHtml}${damageGaugeHtml}</div>`;
 
   elements.happening.querySelectorAll("[data-happening-action]").forEach(element => {
     element.addEventListener("click", handleHappeningClick);
     element.addEventListener("change", handleHappeningChange);
+  });
+  elements.happening.querySelectorAll("[data-damage-action]").forEach(element => {
+    element.addEventListener("change", handleDamageChange);
   });
 }
 
@@ -665,6 +693,19 @@ async function handleHappeningChange(event) {
   await saveState(next);
 }
 
+async function handleDamageChange(event) {
+  if (mode !== "gm") return;
+  const action = event.target.dataset.damageAction;
+  if (action !== "visible" && action !== "value") return;
+  const next = structuredClone(state);
+  const damage = damageState(next.damage);
+  next.damage = {
+    ...damage,
+    [action]: action === "visible" ? event.target.checked : clampProgress(event.target.value, damage.max)
+  };
+  await saveState(next);
+}
+
 function previewHappeningRoll(roll) {
   const item = findHappening(roll);
   const card = elements.happening?.querySelector(".happening-card");
@@ -738,6 +779,7 @@ function defaultState() {
     activeFsId: firstId,
     activeFsIds: [],
     happening: happeningState(),
+    damage: damageState(),
     fs: Object.fromEntries(fsData.map(fs => [fs.id, mergeFsState({}, fs)]))
   };
 }
@@ -756,6 +798,7 @@ function mergeState(raw) {
     }
   }
   next.happening = happeningState(raw?.happening);
+  next.damage = damageState(raw?.damage);
   Object.entries(raw?.fs || {}).forEach(([id, value]) => {
     const fs = fsData.find(item => item.id === id);
     next.fs[id] = mergeFsState(value, fs);
@@ -772,6 +815,15 @@ function happeningState(value = {}) {
     roll,
     range: String(value?.range || item?.range || ""),
     effect: String(value?.effect || item?.effect || "")
+  };
+}
+
+function damageState(value = {}) {
+  const max = 100;
+  return {
+    visible: Boolean(value?.visible),
+    value: clampProgress(value?.value, max),
+    max
   };
 }
 
