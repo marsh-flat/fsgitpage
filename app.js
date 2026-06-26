@@ -21,6 +21,7 @@ let unsubscribe = null;
 let state = defaultState();
 let activeInfoText = "";
 let showAllFs = false;
+let happeningRolling = false;
 const roomPath = room.replace(/[.#$[\]/]/g, "_");
 
 const elements = {
@@ -143,32 +144,32 @@ function renderHappening() {
 
   elements.happening.hidden = false;
   elements.happening.innerHTML = `
-    <section class="happening-card">
+    <section class="happening-card ${happeningRolling ? "rolling" : ""}">
       <div class="happening-main">
         <div class="happening-title">ハプニングチャート</div>
         <div class="happening-roll">
           <span>D100</span>
-          <strong>${happening.roll ? String(happening.roll).padStart(2, "0") : "--"}</strong>
-          ${item ? `<small>${escapeHtml(item.range)}</small>` : ""}
+          <strong>${formatRoll(happening.roll)}</strong>
+          <small>${escapeHtml(item?.range || happening.range || "")}</small>
         </div>
-        <p>${escapeHtml(item?.effect || "まだ決定されていません。")}</p>
+        <p>${escapeHtml(item?.effect || happening.effect || "まだ決定されていません。")}</p>
       </div>
-      ${mode === "gm" ? `
-        <div class="happening-controls">
-          <button type="button" data-happening-action="roll" ${happening.locked ? "disabled" : ""}>ロール</button>
+      <div class="happening-controls">
+        <button type="button" data-happening-action="roll" ${happening.locked || happeningRolling ? "disabled" : ""}>
+          ${happeningRolling ? "ロール中" : "ロール"}
+        </button>
+        ${mode === "gm" ? `
           <label><input type="checkbox" data-happening-action="visible" ${happening.visible ? "checked" : ""}> 表示</label>
           <label><input type="checkbox" data-happening-action="locked" ${happening.locked ? "checked" : ""}> ロック</label>
-        </div>
-      ` : ""}
+        ` : ""}
+      </div>
     </section>
   `;
 
-  if (mode === "gm") {
-    elements.happening.querySelectorAll("[data-happening-action]").forEach(element => {
-      element.addEventListener("click", handleHappeningClick);
-      element.addEventListener("change", handleHappeningChange);
-    });
-  }
+  elements.happening.querySelectorAll("[data-happening-action]").forEach(element => {
+    element.addEventListener("click", handleHappeningClick);
+    element.addEventListener("change", handleHappeningChange);
+  });
 }
 
 function renderFsSelect() {
@@ -610,22 +611,43 @@ async function handleDetailClick(event) {
 }
 
 async function handleHappeningClick(event) {
-  if (event.target.dataset.happeningAction !== "roll") return;
+  const button = event.target.closest("[data-happening-action='roll']");
+  if (!button) return;
   const current = happeningState(state.happening);
-  if (current.locked) return;
-  const roll = Math.floor(Math.random() * 100) + 1;
-  const item = findHappening(roll);
-  const next = structuredClone(state);
-  next.happening = {
-    ...current,
-    roll,
-    range: item?.range || "",
-    effect: item?.effect || ""
-  };
-  await saveState(next);
+  if (current.locked || happeningRolling) return;
+
+  happeningRolling = true;
+  renderHappening();
+  try {
+    const rolls = Array.from({ length: 8 }, rollD100);
+    const finalRoll = rollD100();
+    rolls.push(finalRoll);
+
+    for (const [index, roll] of rolls.entries()) {
+      previewHappeningRoll(roll);
+      await wait(index === rolls.length - 1 ? 160 : 85 + index * 8);
+    }
+
+    const item = findHappening(finalRoll);
+    const next = structuredClone(state);
+    next.happening = {
+      ...happeningState(next.happening),
+      roll: finalRoll,
+      range: item?.range || "",
+      effect: item?.effect || ""
+    };
+    happeningRolling = false;
+    await saveState(next);
+  } finally {
+    if (happeningRolling) {
+      happeningRolling = false;
+      renderHappening();
+    }
+  }
 }
 
 async function handleHappeningChange(event) {
+  if (mode !== "gm") return;
   const action = event.target.dataset.happeningAction;
   if (action !== "visible" && action !== "locked") return;
   const next = structuredClone(state);
@@ -634,6 +656,31 @@ async function handleHappeningChange(event) {
     [action]: event.target.checked
   };
   await saveState(next);
+}
+
+function previewHappeningRoll(roll) {
+  const item = findHappening(roll);
+  const card = elements.happening?.querySelector(".happening-card");
+  if (!card) return;
+  card.classList.add("rolling");
+  const rollNumber = card.querySelector(".happening-roll strong");
+  const rollRange = card.querySelector(".happening-roll small");
+  const effect = card.querySelector("p");
+  if (rollNumber) rollNumber.textContent = formatRoll(roll);
+  if (rollRange) rollRange.textContent = item?.range || "";
+  if (effect) effect.textContent = item?.effect || "";
+}
+
+function rollD100() {
+  return Math.floor(Math.random() * 100) + 1;
+}
+
+function formatRoll(roll) {
+  return roll ? String(roll).padStart(2, "0") : "--";
+}
+
+function wait(ms) {
+  return new Promise(resolve => window.setTimeout(resolve, ms));
 }
 
 function openInfoDialog(dataset) {

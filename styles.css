@@ -252,6 +252,10 @@ body[data-mode="player"] #fs-detail.multi-fs {
   background: #fff;
 }
 
+.happening-card.rolling {
+  background: #f8fafc;
+}
+
 .happening-main {
   min-width: 0;
   display: grid;
@@ -276,11 +280,21 @@ body[data-mode="player"] #fs-detail.multi-fs {
   white-space: nowrap;
 }
 
+.happening-card.rolling .happening-roll {
+  background: #111827;
+  color: #fff;
+}
+
 .happening-roll span,
 .happening-roll small {
   color: var(--muted);
   font-size: 11px;
   font-weight: 900;
+}
+
+.happening-card.rolling .happening-roll span,
+.happening-card.rolling .happening-roll small {
+  color: #e5e7eb;
 }
 
 .happening-roll strong {
@@ -310,6 +324,11 @@ body[data-mode="player"] #fs-detail.multi-fs {
 .happening-controls button {
   min-height: 30px;
   padding: 4px 10px;
+}
+
+.happening-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .happening-controls label {
