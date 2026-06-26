@@ -236,6 +236,93 @@ body[data-mode="player"] #fs-detail.multi-fs {
   padding: 10px;
 }
 
+#happening-panel[hidden] {
+  display: none;
+}
+
+.happening-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border: 1px solid #111827;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.happening-main {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.happening-title {
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.happening-roll {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 3px 7px;
+  border-radius: 7px;
+  background: var(--accent-soft);
+  white-space: nowrap;
+}
+
+.happening-roll span,
+.happening-roll small {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.happening-roll strong {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.happening-card p {
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.happening-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.happening-controls button {
+  min-height: 30px;
+  padding: 4px 10px;
+}
+
+.happening-controls label {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.happening-controls input {
+  accent-color: var(--accent);
+}
+
 .nav-filter {
   display: flex;
   gap: 7px;
@@ -891,6 +978,15 @@ body[data-mode="player"] .fs-scroll-body h3 {
 
   .layout {
     grid-template-columns: 1fr;
+  }
+
+  .happening-card,
+  .happening-main {
+    grid-template-columns: 1fr;
+  }
+
+  .happening-controls {
+    justify-content: flex-start;
   }
 
   .milestones,

@@ -1,5 +1,6 @@
 import { firebaseConfig } from "./firebase-config.js";
 import { fsData } from "./fs-data.js";
+import { happeningChart } from "./happening-data.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
   getDatabase,
@@ -28,6 +29,7 @@ const elements = {
   warning: document.getElementById("setup-warning"),
   fsSelect: document.getElementById("fs-select"),
   nav: document.getElementById("fs-nav"),
+  happening: document.getElementById("happening-panel"),
   detail: document.getElementById("fs-detail"),
   playerUrl: document.getElementById("player-url"),
   copyPlayerUrl: document.getElementById("copy-player-url"),
@@ -125,7 +127,48 @@ function render() {
     elements.fsSelect.value = selectedFsId;
   }
   renderNav();
+  renderHappening();
   renderDetail();
+}
+
+function renderHappening() {
+  if (!elements.happening) return;
+  const happening = happeningState(state.happening);
+  const item = happening.roll ? findHappening(happening.roll) : null;
+  if (mode === "player" && !happening.visible) {
+    elements.happening.innerHTML = "";
+    elements.happening.hidden = true;
+    return;
+  }
+
+  elements.happening.hidden = false;
+  elements.happening.innerHTML = `
+    <section class="happening-card">
+      <div class="happening-main">
+        <div class="happening-title">ハプニングチャート</div>
+        <div class="happening-roll">
+          <span>D100</span>
+          <strong>${happening.roll ? String(happening.roll).padStart(2, "0") : "--"}</strong>
+          ${item ? `<small>${escapeHtml(item.range)}</small>` : ""}
+        </div>
+        <p>${escapeHtml(item?.effect || "まだ決定されていません。")}</p>
+      </div>
+      ${mode === "gm" ? `
+        <div class="happening-controls">
+          <button type="button" data-happening-action="roll" ${happening.locked ? "disabled" : ""}>ロール</button>
+          <label><input type="checkbox" data-happening-action="visible" ${happening.visible ? "checked" : ""}> 表示</label>
+          <label><input type="checkbox" data-happening-action="locked" ${happening.locked ? "checked" : ""}> ロック</label>
+        </div>
+      ` : ""}
+    </section>
+  `;
+
+  if (mode === "gm") {
+    elements.happening.querySelectorAll("[data-happening-action]").forEach(element => {
+      element.addEventListener("click", handleHappeningClick);
+      element.addEventListener("change", handleHappeningChange);
+    });
+  }
 }
 
 function renderFsSelect() {
@@ -566,6 +609,33 @@ async function handleDetailClick(event) {
   await saveState(next);
 }
 
+async function handleHappeningClick(event) {
+  if (event.target.dataset.happeningAction !== "roll") return;
+  const current = happeningState(state.happening);
+  if (current.locked) return;
+  const roll = Math.floor(Math.random() * 100) + 1;
+  const item = findHappening(roll);
+  const next = structuredClone(state);
+  next.happening = {
+    ...current,
+    roll,
+    range: item?.range || "",
+    effect: item?.effect || ""
+  };
+  await saveState(next);
+}
+
+async function handleHappeningChange(event) {
+  const action = event.target.dataset.happeningAction;
+  if (action !== "visible" && action !== "locked") return;
+  const next = structuredClone(state);
+  next.happening = {
+    ...happeningState(next.happening),
+    [action]: event.target.checked
+  };
+  await saveState(next);
+}
+
 function openInfoDialog(dataset) {
   const fs = fsData.find(item => item.id === dataset.fsId);
   const milestone = fs?.milestones?.find(item => String(item.value) === dataset.value);
@@ -613,6 +683,7 @@ function defaultState() {
   return {
     activeFsId: firstId,
     activeFsIds: [],
+    happening: happeningState(),
     fs: Object.fromEntries(fsData.map(fs => [fs.id, mergeFsState({}, fs)]))
   };
 }
@@ -630,11 +701,28 @@ function mergeState(raw) {
       next.activeFsIds = [raw.activeFsId];
     }
   }
+  next.happening = happeningState(raw?.happening);
   Object.entries(raw?.fs || {}).forEach(([id, value]) => {
     const fs = fsData.find(item => item.id === id);
     next.fs[id] = mergeFsState(value, fs);
   });
   return next;
+}
+
+function happeningState(value = {}) {
+  const roll = clampProgress(value?.roll, 100);
+  const item = roll ? findHappening(roll) : null;
+  return {
+    visible: Boolean(value?.visible),
+    locked: Boolean(value?.locked),
+    roll,
+    range: String(value?.range || item?.range || ""),
+    effect: String(value?.effect || item?.effect || "")
+  };
+}
+
+function findHappening(roll) {
+  return happeningChart.find(item => roll >= item.min && roll <= item.max) || null;
 }
 
 function mergeFsState(value, fs = null) {
