@@ -271,6 +271,12 @@ body[data-mode="player"] #fs-detail.multi-fs {
   font-size: 13px;
   background: #f8fafc;
   border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  user-select: none;
+}
+
+.scene-title:hover {
+  background: #edf3f8;
 }
 
 .nav-item {

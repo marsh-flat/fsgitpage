@@ -151,6 +151,14 @@ function renderNav() {
     const title = document.createElement("div");
     title.className = "scene-title";
     title.textContent = sceneName;
+    title.addEventListener("click", () => {
+      const fs = items[0];
+      if (!fs) return;
+      selectedFsId = fs.id;
+      updateUrlParam("fs", selectedFsId);
+      updatePlayerUrl();
+      render();
+    });
     block.appendChild(title);
 
     items.forEach(fs => {
