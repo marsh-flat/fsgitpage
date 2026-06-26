@@ -175,7 +175,22 @@ infos:
 
 ## 更新手順
 
-`fsgitpage` ディレクトリで実行します。
+通常は、`fsgitpage` ディレクトリで次の1本を実行します。
+
+```bash
+tools/deploy_fs.sh --dry-run
+tools/deploy_fs.sh
+```
+
+このスクリプトは以下をまとめて行います。
+
+- `scenario` と `fsgitpage` を `origin/main` に fast-forward 同期する
+- `scenario/シナリオ/ソース` の変更があればコミットして push する
+- scenario 側FS YAMLから `fsgitpage/fs-data.js` を生成する
+- scenario の現在commitを使って `app.js` / `fs-data.js` のキャッシュバストURLを更新する
+- `fsgitpage` をコミットして push し、GitHub Pages の公開確認を行う
+
+従来の表示側だけの同期を行う場合は、`fsgitpage` ディレクトリで次を実行します。
 
 ```bash
 python3 tools/deploy_from_scenario_yaml.py --dry-run
