@@ -386,18 +386,19 @@ body[data-mode="player"] .fs-card {
   min-height: 0;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 6px;
+  border: 2px solid #111827;
+  border-radius: 8px;
+  padding: 8px;
+  background: #fff;
+  overflow: auto;
 }
 
 body[data-mode="player"] #fs-detail.multi-fs .fs-card {
   height: auto;
   min-height: 0;
+  max-height: min(620px, calc(100dvh - 16px));
   grid-template-rows: auto auto;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
-}
-
-body[data-mode="player"] #fs-detail.multi-fs .fs-scroll-body {
-  overflow: visible;
+  overflow: auto;
 }
 
 body[data-mode="player"] #fs-detail.multi-fs .milestones {
@@ -480,7 +481,7 @@ body[data-mode="player"] .meta {
 
 body[data-mode="player"] .basic-info {
   z-index: 5;
-  background: var(--bg);
+  background: #fff;
   padding-bottom: 4px;
 }
 
