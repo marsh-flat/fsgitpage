@@ -192,6 +192,7 @@ function renderNav() {
 }
 
 function renderDetail() {
+  elements.detail.classList.remove("multi-fs");
   if (mode === "player") {
     renderPlayerDetails();
     return;
@@ -207,6 +208,7 @@ function renderDetail() {
 
 function renderPlayerDetails() {
   const items = activeFsItems().filter(fs => fsState(fs.id).visible);
+  elements.detail.classList.toggle("multi-fs", items.length > 1);
   if (!items.length) {
     elements.detail.innerHTML = `<p class="hidden-note">開示中のFSはまだありません。</p>`;
     return;

@@ -221,6 +221,14 @@ body[data-mode="player"] #fs-detail {
   min-height: 0;
 }
 
+body[data-mode="player"] #fs-detail.multi-fs {
+  overflow: auto;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding-right: 2px;
+}
+
 .scroll {
   min-height: 0;
   overflow: auto;
@@ -378,6 +386,11 @@ body[data-mode="player"] .fs-card {
   min-height: 0;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 6px;
+}
+
+body[data-mode="player"] #fs-detail.multi-fs .fs-card {
+  height: auto;
+  min-height: min(720px, 96dvh);
 }
 
 body[data-mode="player"] .fs-head {
