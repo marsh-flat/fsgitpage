@@ -8,7 +8,7 @@ export const fsData = [
     "end": "3R経過または進行値12到達",
     "check": "〈回避〉〈RC〉〈白兵〉〈射撃〉",
     "difficulty": 9,
-    "maxProgress": 12,
+    "maxProgress": 30,
     "targetProgress": 12,
     "exp": 4,
     "pcParticipation": {
