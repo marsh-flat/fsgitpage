@@ -20,7 +20,8 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT.parent / "scenario"
 OUT_JS = ROOT / "fs-data.js"
-PAGES_URL = "https://marsh-flat.github.io/fsgitpage/gm.html?room=ark01&fs=A1"
+PUBLIC_ROOT = "https://marsh-flat.github.io/fsgitpage"
+PAGES_URL = f"{PUBLIC_ROOT}/gm.html?room=ark01&fs=A1"
 DEPLOY_FILES = [
     ".nojekyll",
     "README.md",
@@ -87,8 +88,8 @@ def main() -> int:
     run(["git", "push"], cwd=ROOT)
 
     commit = run_capture(["git", "rev-parse", "HEAD"], cwd=ROOT).strip()
-    wait_for_pages(commit)
-    verify_public_url()
+    wait_for_pages(commit, args.cache_version)
+    verify_public_url(args.cache_version)
     print("done")
     return 0
 
@@ -253,49 +254,54 @@ def apply_cache_version(version: str) -> None:
     print(f"cache version: {version}")
 
 
-def wait_for_pages(commit: str) -> None:
+def wait_for_pages(commit: str, cache_version: str = "") -> None:
     print("waiting for GitHub Pages...")
+    token = commit[:12]
     for attempt in range(1, 31):
         try:
-            data = run_capture([
-                "gh",
-                "api",
-                "repos/marsh-flat/fsgitpage/actions/runs",
-                "--jq",
-                ".workflow_runs[0] | {status, conclusion, head_sha}",
-            ], cwd=ROOT, timeout=8)
-        except subprocess.TimeoutExpired:
-            print(f"Actions check {attempt}/30: timeout")
-            data = ""
-        except subprocess.CalledProcessError as error:
-            print(f"Actions check {attempt}/30: failed: {error.output.strip()}")
-            data = ""
+            html = fetch_text(f"{PUBLIC_ROOT}/gm.html?deploy-check={token}-{attempt}")
+            app = fetch_text(f"{PUBLIC_ROOT}/app.js?deploy-check={token}-{attempt}")
+        except Exception as error:
+            print(f"Pages check {attempt}/30: failed: {error}")
+            time.sleep(5)
+            continue
 
-        if data:
-            print(f"Actions check {attempt}/30: {data}")
-            compact = compact_json(data)
-            if (commit[:7] in data or commit in data) and '"status":"completed"' in compact and '"conclusion":"success"' in compact:
-                return
+        if cache_version:
+            html_ok = f"./app.js?v={cache_version}" in html
+            app_ok = f"./fs-data.js?v={cache_version}" in app
+        else:
+            html_ok = "<!doctype html>" in html.lower()
+            app_ok = "import { fsData }" in app
+
+        print(f"Pages check {attempt}/30: html={'ok' if html_ok else 'old'} app={'ok' if app_ok else 'old'}")
+        if html_ok and app_ok:
+            return
 
         time.sleep(5)
 
-    print("Pages build was not confirmed from Actions. Checking Pages status directly...")
     pages = run_capture(["gh", "api", "repos/marsh-flat/fsgitpage/pages", "--jq", ".status"], cwd=ROOT, timeout=8).strip()
-    if pages != "built":
-        fail(f"GitHub Pages did not finish building. status={pages}")
+    fail(f"GitHub Pages did not publish the expected cache version. status={pages}")
 
 
-def compact_json(value: str) -> str:
-    return re.sub(r"\s+", "", value)
-
-
-def verify_public_url() -> None:
+def verify_public_url(cache_version: str = "") -> None:
     print(f"checking: {PAGES_URL}")
     request = urllib.request.Request(PAGES_URL, method="HEAD")
     with urllib.request.urlopen(request, timeout=20) as response:
         if response.status != 200:
             fail(f"Public URL did not return 200: {response.status}")
+    if cache_version:
+        html = fetch_text(f"{PUBLIC_ROOT}/gm.html?verify={cache_version}")
+        if f"./app.js?v={cache_version}" not in html:
+            fail(f"Public URL did not contain cache version: {cache_version}")
     print("public URL: 200 OK")
+
+
+def fetch_text(url: str) -> str:
+    request = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+    with urllib.request.urlopen(request, timeout=20) as response:
+        if response.status != 200:
+            fail(f"Public URL did not return 200: {response.status}")
+        return response.read().decode("utf-8")
 
 
 def run(command: list[str], cwd: Path) -> None:
