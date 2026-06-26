@@ -159,6 +159,10 @@ function renderHappening() {
             現在値
             <input class="damage-input" type="number" min="0" max="${damage.max}" step="1" value="${damage.value}" data-damage-action="value">
           </label>
+          <label>
+            MAX
+            <input class="damage-input" type="number" min="1" max="100" step="1" value="${damage.max}" data-damage-action="max">
+          </label>
           <label><input type="checkbox" data-damage-action="visible" ${damage.visible ? "checked" : ""}> 表示</label>
         </div>
       ` : ""}
@@ -696,13 +700,24 @@ async function handleHappeningChange(event) {
 async function handleDamageChange(event) {
   if (mode !== "gm") return;
   const action = event.target.dataset.damageAction;
-  if (action !== "visible" && action !== "value") return;
+  if (action !== "visible" && action !== "value" && action !== "max") return;
   const next = structuredClone(state);
   const damage = damageState(next.damage);
-  next.damage = {
-    ...damage,
-    [action]: action === "visible" ? event.target.checked : clampProgress(event.target.value, damage.max)
-  };
+  if (action === "visible") {
+    next.damage = { ...damage, visible: event.target.checked };
+  } else if (action === "max") {
+    const max = clampRange(event.target.value, 1, 100);
+    next.damage = {
+      ...damage,
+      max,
+      value: clampProgress(damage.value, max)
+    };
+  } else {
+    next.damage = {
+      ...damage,
+      value: clampProgress(event.target.value, damage.max)
+    };
+  }
   await saveState(next);
 }
 
@@ -819,7 +834,7 @@ function happeningState(value = {}) {
 }
 
 function damageState(value = {}) {
-  const max = 100;
+  const max = clampRange(value?.max ?? 100, 1, 100);
   return {
     visible: Boolean(value?.visible),
     value: clampProgress(value?.value, max),
@@ -871,6 +886,12 @@ function clampProgress(value, max) {
   const number = Number(value);
   if (!Number.isFinite(number)) return 0;
   return Math.max(0, Math.min(max, Math.round(number)));
+}
+
+function clampRange(value, min, max) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return max;
+  return Math.max(min, Math.min(max, Math.round(number)));
 }
 
 function fsState(id) {
