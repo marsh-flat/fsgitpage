@@ -112,9 +112,7 @@ function renderStaticControls() {
 }
 
 function render() {
-  if (mode === "player") {
-    selectedFsId = activeFsId();
-  } else {
+  if (mode !== "player") {
     const nextSelectedFsId = selectableFsId(selectedFsId);
     if (nextSelectedFsId !== selectedFsId) {
       selectedFsId = nextSelectedFsId;
@@ -145,7 +143,7 @@ function renderNav() {
   if (!elements.nav) return;
   const grouped = groupByScene(visibleFsItems());
   elements.nav.innerHTML = "";
-  const activeId = activeFsId();
+  const activeIds = activeFsIds();
 
   Object.entries(grouped).forEach(([sceneName, items]) => {
     const block = document.createElement("div");
@@ -161,23 +159,28 @@ function renderNav() {
       item.className = [
         "nav-item",
         fs.id === selectedFsId ? "active" : "",
-        fs.id === activeId ? "broadcast" : "",
+        activeIds.includes(fs.id) ? "broadcast" : "",
         requiresSuccess.length ? "locked-rule" : ""
       ].filter(Boolean).join(" ");
       item.innerHTML = `
-        <input type="radio" name="active-fs" value="${fs.id}" ${fs.id === activeId ? "checked" : ""}>
+        <input type="checkbox" value="${fs.id}" ${activeIds.includes(fs.id) ? "checked" : ""}>
         <span class="nav-code">${fs.code}</span>
         <span class="nav-title-wrap">
           <span class="nav-title">${escapeHtml(fs.title)}</span>
           ${renderPrerequisiteBadges(requiresSuccess)}
         </span>
       `;
-      item.querySelector("input").addEventListener("change", async () => {
+      const input = item.querySelector("input");
+      input.addEventListener("change", async () => {
         selectedFsId = fs.id;
         updateUrlParam("fs", selectedFsId);
         updatePlayerUrl();
         const next = structuredClone(state);
-        next.activeFsId = fs.id;
+        next.activeFsIds = updateIdList(activeFsIds(next), fs.id, input.checked);
+        next.activeFsId = next.activeFsIds[0] || fs.id;
+        next.fs ??= {};
+        next.fs[fs.id] = mergeFsState(next.fs[fs.id], fs);
+        next.fs[fs.id].visible = input.checked;
         await saveState(next);
       });
       block.appendChild(item);
@@ -188,8 +191,30 @@ function renderNav() {
 }
 
 function renderDetail() {
+  if (mode === "player") {
+    renderPlayerDetails();
+    return;
+  }
   const fs = fsData.find(item => item.id === selectedFsId) || fsData[0];
   if (!fs) return;
+  elements.detail.innerHTML = renderFsCard(fs) + renderInfoDialog();
+  elements.detail.onclick = handleDetailClick;
+  elements.detail.querySelectorAll("[data-action]").forEach(input => {
+    input.addEventListener("change", event => handleGmChange(fs.id, event));
+  });
+}
+
+function renderPlayerDetails() {
+  const items = activeFsItems().filter(fs => fsState(fs.id).visible);
+  if (!items.length) {
+    elements.detail.innerHTML = `<p class="hidden-note">開示中のFSはまだありません。</p>`;
+    return;
+  }
+  elements.detail.innerHTML = items.map(fs => renderFsCard(fs)).join("") + renderInfoDialog();
+  elements.detail.onclick = handleDetailClick;
+}
+
+function renderFsCard(fs) {
   const current = fsState(fs.id);
   const maxProgress = Number(fs.maxProgress || 30);
   const targetProgress = Number(fs.targetProgress || maxProgress);
@@ -205,8 +230,7 @@ function renderDetail() {
   ` : "";
 
   if (mode === "player" && !current.visible) {
-    elements.detail.innerHTML = `<p class="hidden-note">このFSはまだGMから開示されていません。</p>`;
-    return;
+    return `<p class="hidden-note">このFSはまだGMから開示されていません。</p>`;
   }
 
   const milestoneHtml = fs.milestones.map(milestone => {
@@ -240,7 +264,7 @@ function renderDetail() {
 
   const resultHtml = renderResult(fs, current);
 
-  elements.detail.innerHTML = `
+  return `
     <article class="fs-card">
       <div class="fs-head">
         <div>
@@ -312,6 +336,11 @@ function renderDetail() {
         </div>
       </div>
     </article>
+  `;
+}
+
+function renderInfoDialog() {
+  return `
     <dialog class="info-dialog" id="info-dialog">
       <div class="info-dialog-head">
         <h3 id="info-dialog-title">情報</h3>
@@ -323,13 +352,6 @@ function renderDetail() {
       <div class="info-dialog-body" id="info-dialog-body"></div>
     </dialog>
   `;
-
-  elements.detail.onclick = handleDetailClick;
-  if (mode === "gm") {
-    elements.detail.querySelectorAll("[data-action]").forEach(input => {
-      input.addEventListener("change", event => handleGmChange(fs.id, event));
-    });
-  }
 }
 
 function renderMilestoneInfos(fsId, milestoneKey, milestone, current) {
@@ -432,6 +454,8 @@ async function handleGmChange(fsId, event) {
 
   if (action === "visible") {
     next.fs[fsId].visible = target.checked;
+    next.activeFsIds = updateIdList(activeFsIds(next), fsId, target.checked);
+    next.activeFsId = next.activeFsIds[0] || fsId;
   } else if (action === "milestone") {
     next.fs[fsId].milestones[target.dataset.value] = target.checked;
   } else if (action === "info") {
@@ -526,16 +550,26 @@ async function saveState(next) {
 }
 
 function defaultState() {
+  const firstId = fsData[0]?.id || "";
   return {
-    activeFsId: fsData[0]?.id || "",
+    activeFsId: firstId,
+    activeFsIds: [],
     fs: Object.fromEntries(fsData.map(fs => [fs.id, mergeFsState({}, fs)]))
   };
 }
 
 function mergeState(raw) {
   const next = defaultState();
+  const rawActiveFsIds = Array.isArray(raw?.activeFsIds) ? raw.activeFsIds : [];
+  const mergedActiveFsIds = rawActiveFsIds.map(String).filter(id => fsData.some(fs => fs.id === id));
+  if (mergedActiveFsIds.length) {
+    next.activeFsIds = mergedActiveFsIds;
+  }
   if (fsData.some(fs => fs.id === raw?.activeFsId)) {
     next.activeFsId = raw.activeFsId;
+    if (!mergedActiveFsIds.length) {
+      next.activeFsIds = [raw.activeFsId];
+    }
   }
   Object.entries(raw?.fs || {}).forEach(([id, value]) => {
     const fs = fsData.find(item => item.id === id);
@@ -592,7 +626,30 @@ function fsState(id) {
 }
 
 function activeFsId() {
-  return fsData.some(fs => fs.id === state.activeFsId) ? state.activeFsId : fsData[0]?.id;
+  return activeFsIds()[0] || state.activeFsId || fsData[0]?.id;
+}
+
+function activeFsIds(source = state) {
+  if (Array.isArray(source.activeFsIds)) {
+    return source.activeFsIds.map(String).filter(id => fsData.some(fs => fs.id === id));
+  }
+  return fsData.some(fs => fs.id === source.activeFsId) ? [source.activeFsId] : [];
+}
+
+function activeFsItems() {
+  const visibleItems = visibleFsItems();
+  const ids = activeFsIds();
+  return visibleItems.filter(fs => ids.includes(fs.id));
+}
+
+function updateIdList(ids, id, checked) {
+  const set = new Set(ids);
+  if (checked) {
+    set.add(id);
+  } else {
+    set.delete(id);
+  }
+  return fsData.map(fs => fs.id).filter(fsId => set.has(fsId));
 }
 
 function selectableFsId(id) {
