@@ -240,6 +240,13 @@ body[data-mode="player"] #fs-detail.multi-fs {
   display: none;
 }
 
+body[data-mode="player"] #happening-panel {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
+}
+
 .happening-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
