@@ -22,6 +22,7 @@ let state = defaultState();
 let activeInfoText = "";
 let showAllFs = false;
 let happeningRolling = false;
+let casualtyRolling = false;
 const roomPath = room.replace(/[.#$[\]/]/g, "_");
 
 const elements = {
@@ -171,7 +172,7 @@ function renderHappening() {
   ` : "";
 
   const casualtyHtml = mode === "gm" || casualty.visible ? `
-    <section class="casualty-card">
+    <section class="casualty-card ${casualtyRolling ? "rolling" : ""}">
       <div class="casualty-main">
         <div class="casualty-title">被害予想</div>
         <div class="casualty-roll">
@@ -183,7 +184,9 @@ function renderHappening() {
       </div>
       <div class="happening-controls casualty-controls">
         ${mode === "gm" ? `
-          <button type="button" data-casualty-action="roll">ロール</button>
+          <button type="button" data-casualty-action="roll" ${casualtyRolling ? "disabled" : ""}>
+            ${casualtyRolling ? "ロール中" : "ロール"}
+          </button>
           <label><input type="checkbox" data-casualty-action="visible" ${casualty.visible ? "checked" : ""}> 表示</label>
         ` : ""}
       </div>
@@ -726,12 +729,33 @@ async function handleCasualtyClick(event) {
   if (mode !== "gm") return;
   const button = event.target.closest("[data-casualty-action='roll']");
   if (!button) return;
-  const next = structuredClone(state);
-  next.casualty = {
-    ...casualtyState(next.casualty),
-    count: rollD4()
-  };
-  await saveState(next);
+  if (casualtyRolling) return;
+
+  casualtyRolling = true;
+  renderHappening();
+  try {
+    const rolls = Array.from({ length: 7 }, rollD4);
+    const finalRoll = rollD4();
+    rolls.push(finalRoll);
+
+    for (const [index, roll] of rolls.entries()) {
+      previewCasualtyRoll(roll);
+      await wait(index === rolls.length - 1 ? 160 : 75 + index * 8);
+    }
+
+    const next = structuredClone(state);
+    next.casualty = {
+      ...casualtyState(next.casualty),
+      count: finalRoll
+    };
+    casualtyRolling = false;
+    await saveState(next);
+  } finally {
+    if (casualtyRolling) {
+      casualtyRolling = false;
+      renderHappening();
+    }
+  }
 }
 
 async function handleCasualtyChange(event) {
@@ -781,6 +805,16 @@ function previewHappeningRoll(roll) {
   if (rollNumber) rollNumber.textContent = formatRoll(roll);
   if (rollRange) rollRange.textContent = item?.range || "";
   if (effect) effect.textContent = item?.effect || "";
+}
+
+function previewCasualtyRoll(roll) {
+  const card = elements.happening?.querySelector(".casualty-card");
+  if (!card) return;
+  card.classList.add("rolling");
+  const count = card.querySelector(".casualty-roll strong");
+  const text = card.querySelector("p");
+  if (count) count.textContent = String(roll);
+  if (text) text.textContent = `予想被害人数 ${roll}人`;
 }
 
 function rollD100() {

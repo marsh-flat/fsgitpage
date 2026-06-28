@@ -279,6 +279,10 @@ body[data-mode="player"] #happening-panel {
   background: #f8fafc;
 }
 
+.casualty-card.rolling {
+  background: #f8fafc;
+}
+
 .happening-main {
   min-width: 0;
   display: grid;
@@ -359,11 +363,21 @@ body[data-mode="player"] #happening-panel {
   white-space: nowrap;
 }
 
+.casualty-card.rolling .casualty-roll {
+  background: #111827;
+  color: #fff;
+}
+
 .casualty-roll span,
 .casualty-roll small {
   color: #7c2d12;
   font-size: 11px;
   font-weight: 900;
+}
+
+.casualty-card.rolling .casualty-roll span,
+.casualty-card.rolling .casualty-roll small {
+  color: #e5e7eb;
 }
 
 .casualty-roll strong {
