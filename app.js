@@ -135,9 +135,10 @@ function render() {
 function renderHappening() {
   if (!elements.happening) return;
   const happening = happeningState(state.happening);
+  const casualty = casualtyState(state.casualty);
   const damage = damageState(state.damage);
   const item = happening.roll ? findHappening(happening.roll) : null;
-  if (mode === "player" && !happening.visible && !damage.visible) {
+  if (mode === "player" && !happening.visible && !casualty.visible && !damage.visible) {
     elements.happening.innerHTML = "";
     elements.happening.hidden = true;
     return;
@@ -169,6 +170,26 @@ function renderHappening() {
     </section>
   ` : "";
 
+  const casualtyHtml = mode === "gm" || casualty.visible ? `
+    <section class="casualty-card">
+      <div class="casualty-main">
+        <div class="casualty-title">被害予想</div>
+        <div class="casualty-roll">
+          <span>1D4</span>
+          <strong>${casualty.count || "--"}</strong>
+          <small>人</small>
+        </div>
+        <p>${casualty.count ? `予想被害人数 ${casualty.count}人` : "まだ決定されていません。"}</p>
+      </div>
+      <div class="happening-controls casualty-controls">
+        ${mode === "gm" ? `
+          <button type="button" data-casualty-action="roll">ロール</button>
+          <label><input type="checkbox" data-casualty-action="visible" ${casualty.visible ? "checked" : ""}> 表示</label>
+        ` : ""}
+      </div>
+    </section>
+  ` : "";
+
   const happeningHtml = mode === "gm" || happening.visible ? `
     <section class="happening-card ${happeningRolling ? "rolling" : ""}">
       <div class="happening-main">
@@ -193,11 +214,15 @@ function renderHappening() {
   ` : "";
 
   elements.happening.hidden = false;
-  elements.happening.innerHTML = `<div class="top-status-panel">${happeningHtml}${damageGaugeHtml}</div>`;
+  elements.happening.innerHTML = `<div class="top-status-panel">${happeningHtml}${casualtyHtml}${damageGaugeHtml}</div>`;
 
   elements.happening.querySelectorAll("[data-happening-action]").forEach(element => {
     element.addEventListener("click", handleHappeningClick);
     element.addEventListener("change", handleHappeningChange);
+  });
+  elements.happening.querySelectorAll("[data-casualty-action]").forEach(element => {
+    element.addEventListener("click", handleCasualtyClick);
+    element.addEventListener("change", handleCasualtyChange);
   });
   elements.happening.querySelectorAll("[data-damage-action]").forEach(element => {
     element.addEventListener("change", handleDamageChange);
@@ -697,6 +722,30 @@ async function handleHappeningChange(event) {
   await saveState(next);
 }
 
+async function handleCasualtyClick(event) {
+  if (mode !== "gm") return;
+  const button = event.target.closest("[data-casualty-action='roll']");
+  if (!button) return;
+  const next = structuredClone(state);
+  next.casualty = {
+    ...casualtyState(next.casualty),
+    count: rollD4()
+  };
+  await saveState(next);
+}
+
+async function handleCasualtyChange(event) {
+  if (mode !== "gm") return;
+  const action = event.target.dataset.casualtyAction;
+  if (action !== "visible") return;
+  const next = structuredClone(state);
+  next.casualty = {
+    ...casualtyState(next.casualty),
+    visible: event.target.checked
+  };
+  await saveState(next);
+}
+
 async function handleDamageChange(event) {
   if (mode !== "gm") return;
   const action = event.target.dataset.damageAction;
@@ -736,6 +785,10 @@ function previewHappeningRoll(roll) {
 
 function rollD100() {
   return Math.floor(Math.random() * 100) + 1;
+}
+
+function rollD4() {
+  return Math.floor(Math.random() * 4) + 1;
 }
 
 function formatRoll(roll) {
@@ -794,6 +847,7 @@ function defaultState() {
     activeFsId: firstId,
     activeFsIds: [],
     happening: happeningState(),
+    casualty: casualtyState(),
     damage: damageState(),
     fs: Object.fromEntries(fsData.map(fs => [fs.id, mergeFsState({}, fs)]))
   };
@@ -813,6 +867,7 @@ function mergeState(raw) {
     }
   }
   next.happening = happeningState(raw?.happening);
+  next.casualty = casualtyState(raw?.casualty);
   next.damage = damageState(raw?.damage);
   Object.entries(raw?.fs || {}).forEach(([id, value]) => {
     const fs = fsData.find(item => item.id === id);
@@ -839,6 +894,13 @@ function damageState(value = {}) {
     visible: Boolean(value?.visible),
     value: clampProgress(value?.value, max),
     max
+  };
+}
+
+function casualtyState(value = {}) {
+  return {
+    visible: Boolean(value?.visible),
+    count: clampProgress(value?.count, 4)
   };
 }
 
